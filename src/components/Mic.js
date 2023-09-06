@@ -108,7 +108,7 @@ const Mic = () => {
 
     try {
       const response = await fetch(
-        "https://3f61-34-124-150-43.ngrok-free.app/transcribe/",
+        "https://8529-34-70-136-210.ngrok-free.app/transcribe/",
         {
           method: "POST",
           body: formData,
@@ -131,7 +131,7 @@ const Mic = () => {
   const handleSound = async () => {
     try {
       const response = await fetch(
-        "https://3f61-34-124-150-43.ngrok-free.app/coqui-tts/",
+        "https://8529-34-70-136-210.ngrok-free.app/coqui-tts/",
         {
           method: "POST",
           headers: {
