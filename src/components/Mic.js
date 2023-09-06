@@ -158,7 +158,7 @@ const Mic = () => {
   };
 
   return (
-    <div className="bg-gradient-to-r bg-cover bg-center from-blue-100 via-white to-cyan-300 min-h-screen p-10">
+    <div className="bg-gradient-to-b bg-cover bg-center from-white via-blue-100 to-cyan-300 min-h-screen p-10">
       {transcription && (
         <div className="flex flex-row justify-around items-center p-4">
           <button
@@ -276,7 +276,7 @@ const Mic = () => {
             )}
             <button
               onClick={handleTranscribe}
-              className="bg-gradient-to-r from-pink-300 via-violet-300 to-purple-400 hover:bg-blue-700 text-white font-bold py-2 px-6 ml-2 rounded-full focus:outline-none focus:shadow-outline"
+              className="bg-gradient-to-r from-pink-300 via-violet-300 to-purple-400 hover:bg-blue-700 text-white font-bold shadow-md py-2 px-6 ml-2 rounded-full focus:outline-none focus:shadow-outline"
             >
               Transcribe
             </button>
