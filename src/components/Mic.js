@@ -78,7 +78,7 @@ const Mic = () => {
 
     try {
       const response = await fetch(
-        "https://9031-34-173-122-139.ngrok-free.app/transcribe/",
+        "https://aabe-34-124-150-43.ngrok-free.app/transcribe/",
         {
           method: "POST",
           body: formData,
@@ -99,8 +99,14 @@ const Mic = () => {
   };
 
   return (
-    <div className="bg-gradient-to-r bg-cover bg-center from-blue-200 via-white to-cyan-300 min-h-screen">
-      <div className="fixed bottom-0 left-0 right-0 bg-gray-100 border-t border-gray-300">
+    <div className="bg-gradient-to-r bg-cover bg-center from-blue-100 via-white to-cyan-300 min-h-screen p-10">
+      {transcription && (
+        <div className="flex flex-col justify-start items-start ml-auto w-1/2 bg-blue-200 rounded-2xl p-3">
+          <h2 className="text-xl font-semibold">You</h2>
+          <p className="mt-2">{transcription}</p>
+        </div>
+      )}
+      <div className="fixed bottom-0 left-0 right-0 bg-blue-100 border-t border-gray-300">
         <div className="flex flex-row justify-between w-full m-2 p-4 ">
           <div className="audio-controls space-y-2 flex flex-row justify-center items-center">
             {!permission ? (
@@ -116,7 +122,7 @@ const Mic = () => {
               <button
                 onClick={startRecording}
                 type="button"
-                className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full focus:outline-none focus:shadow-outline"
+                className="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full focus:outline-none focus:shadow-outline"
               >
                 Start Recording
               </button>
@@ -170,16 +176,10 @@ const Mic = () => {
             )}
             <button
               onClick={handleTranscribe}
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-6 ml-2 rounded-full focus:outline-none focus:shadow-outline"
+              className="bg-gradient-to-r from-pink-300 via-violet-300 to-purple-400 hover:bg-blue-700 text-white font-bold py-2 px-6 ml-2 rounded-full focus:outline-none focus:shadow-outline"
             >
               Transcribe
             </button>
-            {transcription && (
-              <div className="mt-4">
-                <h2 className="text-xl font-semibold">Transcription:</h2>
-                <p className="mt-2">{transcription}</p>
-              </div>
-            )}
           </div>
         </div>
       </div>
