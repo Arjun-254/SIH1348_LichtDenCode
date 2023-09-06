@@ -1,5 +1,5 @@
 import React, { useState, useRef } from "react";
-import { Bars, CirclesWithBar } from "react-loader-spinner";
+import { Bars, CirclesWithBar,Audio } from "react-loader-spinner";
 
 const Mic = () => {
   // State variables
@@ -21,7 +21,10 @@ const Mic = () => {
   const [audio, setAudio] = useState(null);
 
   //blob url of reply
-  const[audio1,setAudio1] = useState(null);
+  const [audio1, setAudio1] = useState(null);
+
+  //check if reply audio is playing and play loader
+  const [isPlaying, setIsPlaying] = useState(false);
 
   const [clicktranscribe, setclicktranscribe] = useState(false);
 
@@ -140,7 +143,7 @@ const Mic = () => {
           }),
         }
       );
-  
+
       if (response.ok) {
         const responseData = await response.blob(); // Get the binary response data
         const audioUrl = URL.createObjectURL(responseData); // Create a URL for the blob
@@ -153,16 +156,56 @@ const Mic = () => {
       alert("An error occurred while replying to the audio");
     }
   };
-  
 
   return (
     <div className="bg-gradient-to-r bg-cover bg-center from-blue-100 via-white to-cyan-300 min-h-screen p-10">
       {transcription && (
-        <div className="flex flex-col justify-start items-start ml-auto w-1/2 bg-blue-200 rounded-2xl p-3">
-          <h2 className="text-xl font-semibold">You</h2>
-          <p className="mt-2">{transcription}</p>
+        <div className="flex flex-row justify-around items-center p-4">
+          <button
+            onClick={handleSound}
+            className="bg-gradient-to-r from-pink-300 via-violet-300 to-purple-400 hover:bg-blue-700 text-white font-bold py-2 px-6 ml-2 rounded-full shadow-md focus:outline-none focus:shadow-outline flex items-center"
+          >
+            Reply <span className="ml-2">&#10132;</span>
+          </button>
+
+          {audio1 ? (
+            <div className="audio-container flex flex-row items-center mt-2 ml-10">
+                            {isPlaying && (
+                <Audio
+                  height="40"
+                  width="40"
+                  color="#4fa94d"
+                  ariaLabel="audio-loading"
+                  wrapperStyle={{}}
+                  wrapperClass="wrapper-class"
+                  visible={true}
+                />
+              )}
+              <audio
+                src={audio1}
+                controls
+                onPlay={() => {
+                  setIsPlaying(true);
+                }}
+                onPause={() => {
+                  setIsPlaying(false);
+                }}
+                className="mb-2"
+              ></audio>
+              <a
+                download
+                href={audio1}
+                className="text-blue-500 hover:text-blue-700"
+              ></a>
+            </div>
+          ) : null}
+          <div className="flex flex-col justify-start items-start w-1/2 bg-blue-200 rounded-lg p-3">
+            <h2 className="text-lg font-semibold">You</h2>
+            <p className="mt-2 text-sm">{transcription}</p>
+          </div>
         </div>
       )}
+
       <div className="fixed bottom-0 left-0 right-0 bg-blue-100 border-t border-gray-300">
         <div className="flex flex-row justify-between w-full m-2 p-4 ">
           <div className="audio-controls space-y-2 flex flex-row justify-center items-center">
@@ -237,11 +280,8 @@ const Mic = () => {
             >
               Transcribe
             </button>
-            <button onClick={handleSound}
-            className ="bg-gradient-to-r from-pink-300 via-violet-300 to-purple-400 hover:bg-blue-700 text-white font-bold py-2 px-6 ml-2 rounded-full focus:outline-none focus:shadow-outline">
-                Reply
-            </button>
-            <audio src={audio1} controls className="mb-2"></audio>
+
+            {/*             <audio src={audio1} controls className="mb-2"></audio> */}
           </div>
         </div>
       </div>
