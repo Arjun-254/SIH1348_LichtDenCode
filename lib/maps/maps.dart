@@ -33,14 +33,14 @@ class _mapsState extends State<maps> {
         width: MediaQuery.of(context).size.width,
         child: GoogleMap(
           initialCameraPosition:
-              CameraPosition(target: LatLng(23, 45), zoom: 14),
+              CameraPosition(target: LatLng(19.23, 72.85), zoom: 14),
           onMapCreated: _onMapCreated,
           markers: _markers,
           circles: {
             Circle(
                 circleId: CircleId("0"),
-                center: LatLng(23, 45),
-                radius: 750,
+                center: LatLng(19.23, 72.85),
+                radius: 550,
                 fillColor: Colors.green.withOpacity(0.5),
                 strokeColor: Colors.green.withOpacity(0.5),
                 strokeWidth: 1)
