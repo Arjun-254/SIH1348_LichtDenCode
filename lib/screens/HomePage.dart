@@ -15,6 +15,8 @@ import '../models/AudioModel.dart';
 import '../helpers/Utils.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+var lst = [];
+
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -39,7 +41,6 @@ class _HomePageState extends State<HomePage>
   final recorder = FlutterSoundRecorder();
   final player = FlutterSoundPlayer();
   bool isRecorderReady = false, gotSomeTextYo = false, isPlaying = false;
-  var lst = [];
 
   Future record() async {
     if (!isRecorderReady) return;
@@ -203,7 +204,7 @@ class _HomePageState extends State<HomePage>
                 )),
               if (!isPlaying)
                 SizedBox(
-                  height: 70 * (height / deviceHeight),
+                  height: 150 * (height / deviceHeight),
                   child: gotSomeTextYo
                       ? Padding(
                           padding: const EdgeInsets.all(8.0),
@@ -304,7 +305,7 @@ class _HomePageState extends State<HomePage>
 
   Future getAudio(String text) async {
     var res = await http.post(
-      Uri.parse('https://d228-34-125-191-35.ngrok-free.app/coqui-tts/'),
+      Uri.parse('https://75b0-34-125-191-35.ngrok-free.app/coqui-tts/'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -321,7 +322,7 @@ class _HomePageState extends State<HomePage>
 
   Future getNER(String text) async {
     var res = await http.post(
-      Uri.parse('https://8cbc-35-238-163-220.ngrok-free.app/ner/'),
+      Uri.parse('https://75b0-34-125-191-35.ngrok-free.app/ner/'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -337,13 +338,36 @@ class _HomePageState extends State<HomePage>
     }
   }
 
+  Future<List<Object?>> getLLMResponse(String text) async {
+    var res = await http.post(
+      Uri.parse('https://75b0-34-125-191-35.ngrok-free.app/chat/'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{"text": text}),
+    );
+    Map<String, dynamic> data = jsonDecode(res.body);
+    var stuff = Audio.fromJson(data);
+    if (kDebugMode) {
+      print(res.statusCode);
+      await getAudio(stuff.text!);
+    }
+    if (res.statusCode == 200) {
+      if (kDebugMode) {
+        print(res.body);
+      }
+    }
+    return [stuff.text, res.statusCode];
+  }
+
   Future<List<Object?>> sendAudio(File? audioPath) async {
+    List<Object?> lst = [];
     if (kDebugMode) {
       print(audioPath!.path);
     }
     var response = http.MultipartRequest(
       'POST',
-      Uri.parse('https://d228-34-125-191-35.ngrok-free.app/transcribe/'),
+      Uri.parse('https://75b0-34-125-191-35.ngrok-free.app/transcribe/'),
     );
     response.files.add(http.MultipartFile(
         'file', audioPath!.readAsBytes().asStream(), audioPath.lengthSync(),
@@ -362,14 +386,14 @@ class _HomePageState extends State<HomePage>
     Map<String, dynamic> data = jsonDecode(responseBody);
     var stuff = Audio.fromJson(data);
     if (res.statusCode == 200) {
-      await getAudio(stuff.text!);
+      lst = await getLLMResponse(stuff.text!);
       await getNER(stuff.text!);
       if (kDebugMode) {
         print(stuff.text);
       }
     }
 
-    return [stuff.text, res.statusCode];
+    return lst;
   }
 
   Future<File> saveAudioPermanently(String path) async {
