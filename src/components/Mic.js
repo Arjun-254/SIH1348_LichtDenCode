@@ -1,9 +1,18 @@
 import React, { useState, useRef } from "react";
 import { Bars, CirclesWithBar, Audio, Puff } from "react-loader-spinner";
-
+import { FaMicrophone } from "react-icons/fa";
 const Mic = () => {
   // State variables
   const [transcription, setTranscription] = useState("");
+
+  //workaround to double click get route
+  const [count, setCount] = useState(0);
+
+  //For text field instead of voice
+  const [textInput, setTextInput] = useState("");
+
+  //Falcon 40B response
+  const [falcon, setFalcon] = useState(null);
 
   //mic permission
   const [permission, setPermission] = useState(false);
@@ -36,6 +45,10 @@ const Mic = () => {
   const mimeType = "audio/webm";
   //in built api reference
   const mediaRecorder = useRef(null);
+
+  const handleTextInputChange = (event) => {
+    setTextInput(event.target.value);
+  };
 
   // Function to request microphone permission
   const getMicrophonePermission = async () => {
@@ -99,52 +112,55 @@ const Mic = () => {
   // Function to transcribe audio
   const handleTranscribe = async () => {
     setclicktranscribe(true);
-    if (!audio) {
-      alert("Please select an audio file");
-      return;
-    }
-    // Create a Blob from the recorded audio
-    const audioBlob = await fetch(audio).then((res) => res.blob());
+    if (!audio && textInput) {
+      setTranscription(textInput);
+      setclicktranscribe(false);
+    } else {
+      // Create a Blob from the recorded audio
+      const audioBlob = await fetch(audio).then((res) => res.blob());
 
-    // Create a FormData object and append the Blob as "file"
+      // Create a FormData object and append the Blob as "file"
 
-    const formData = new FormData();
-    formData.append("file", audioBlob, "audio.webm");
+      const formData = new FormData();
+      formData.append("file", audioBlob, "audio.webm");
 
-    try {
-      const response = await fetch(
-        "https://8cbc-35-238-163-220.ngrok-free.app/transcribe/",
-        {
-          method: "POST",
-          body: formData,
+      try {
+        const response = await fetch(
+          "https://75b0-34-125-191-35.ngrok-free.app/transcribe/",
+          {
+            method: "POST",
+            body: formData,
+          }
+        );
+
+        if (response.ok) {
+          const data = await response.json();
+          setTranscription(data.text);
+        } else {
+          alert("Transcription failed");
         }
-      );
-
-      if (response.ok) {
-        const data = await response.json();
-        setTranscription(data.text);
-      } else {
-        alert("Transcription failed");
+      } catch (error) {
+        console.error("Error:", error);
+        alert("An error occurred while transcribing the audio");
       }
-    } catch (error) {
-      console.error("Error:", error);
-      alert("An error occurred while transcribing the audio");
+      setclicktranscribe(false);
     }
-    setclicktranscribe(false);
+    console.log(transcription);
   };
 
   const handleSound = async () => {
+    console.log("outside falcon");
     setclickspeak(true);
     try {
       const response = await fetch(
-        "https://8cbc-35-238-163-220.ngrok-free.app/coqui-tts/",
+        "https://75b0-34-125-191-35.ngrok-free.app/coqui-tts/",
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json", // Specify JSON content type
           },
           body: JSON.stringify({
-            text: transcription,
+            text: falcon,
             emotion: "cheerful",
           }),
         }
@@ -168,7 +184,7 @@ const Mic = () => {
   const handleNER = async () => {
     try {
       const response = await fetch(
-        "https://8cbc-35-238-163-220.ngrok-free.app/ner/",
+        "https://75b0-34-125-191-35.ngrok-free.app/ner/",
         {
           method: "POST",
           headers: {
@@ -187,7 +203,14 @@ const Mic = () => {
         console.log(transcription);
         console.log(ner);
         const url = `https://www.google.com/maps/dir/${ner[0]}+station/${ner[1]}+station`;
-        window.open(url, "_blank", "noreferrer");
+        //to only open new window when double clicked
+        if (count == 1) {
+          window.open(url, "_blank", "noreferrer");
+          setCount(0);
+        } else {
+          setCount(count + 1);
+          console.log(count);
+        }
       } else {
         alert("NER failed");
       }
@@ -197,44 +220,94 @@ const Mic = () => {
     }
   };
 
+  const falconResponse = async () => {
+    try {
+      const response = await fetch(
+        "https://75b0-34-125-191-35.ngrok-free.app/chat/",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json", // Specify JSON content type
+          },
+          body: JSON.stringify({
+            text: transcription,
+            emotion: "Neutral",
+          }),
+        }
+      );
+
+      if (response.ok) {
+        const falcon_response = await response.json();
+        setFalcon(falcon_response.text);
+        console.log(falcon_response);
+      } else {
+        alert("Model did not send a response");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      alert("Error while fetching Model");
+    }
+  };
+
   return (
     <div className="bg-gradient-to-b bg-cover bg-center from-white via-blue-100 to-cyan-300 min-h-screen py-10 px-6">
+      <div className="flex justify-center items-center mx-auto p-2 mb-4 rounded-3xl bg-gradient-to-r from-gray-400 via-gray-300 to-gray-500 w-1/6">
+        <p className="text-gray-900 font-bold">Railway Buddy</p>
+      </div>
+
       {transcription && (
         <div className="flex flex-row justify-end items-center ml-auto">
           <button
-            onClick={handleSound}
+            onClick={falconResponse}
             className="bg-gradient-to-r from-pink-300 via-violet-300 to-purple-400 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-full shadow-md focus:outline-none focus:shadow-outline flex items-center"
           >
-            Speak
-            {clickspeak && (
-              <Puff
-                height="30"
-                width="30"
-                radius={1}
-                color="#4fa94d"
-                ariaLabel="puff-loading"
-                wrapperStyle={{}}
-                wrapperClass=""
-                visible={true}
-              />
-            )}
-            <span className="mlc-2">&#10132;</span>
+            Reply
           </button>
-
           <button
             onClick={handleNER}
             className="bg-gradient-to-r from-pink-300 via-violet-300 to-purple-400 hover:bg-blue-700 text-white font-bold py-2 px-6 mx-2 rounded-full shadow-md focus:outline-none focus:shadow-outline flex items-center"
           >
-            Get Route <span className="mlc-2">&#10132;</span>
+            Route <span className="mlc-2">&#10132;</span>
           </button>
 
+          <div className="flex flex-col justify-start items-start w-1/2 bg-blue-200 rounded-lg p-3">
+            <h2 className="text-lg font-semibold">You</h2>
+            <p className="mt-2 text-sm">{transcription}</p>
+          </div>
+        </div>
+      )}
+      {falcon && (
+        <div className="flex flex-row justify-start items-center mr-auto pt-2">
+          <div className="flex flex-col justify-start items-start w-1/2 bg-gray-200 rounded-lg p-3">
+            <h2 className="text-lg font-semibold">Railway Buddy 🤖</h2>
+            <p className="mt-2 text-sm">{falcon}</p>
+          </div>
+          <button
+            onClick={handleSound}
+            className="bg-gradient-to-r from-pink-300 via-violet-300 to-purple-400 hover:bg-blue-700 text-white font-bold ml-4 py-2 px-6 rounded-full shadow-md focus:outline-none focus:shadow-outline flex items-center"
+          >
+            {clickspeak && (
+              <Puff
+                height="25"
+                width="25"
+                radius={2}
+                color="#009CFF"
+                ariaLabel="puff-loading"
+                wrapperStyle={{}}
+                wrapperClass=""
+                visible={true}
+                className="mr-2"
+              />
+            )}
+            Speak <FaMicrophone />
+          </button>
           {audio1 ? (
             <div className="audio-container flex flex-row items-center mt-2 mx-4">
               {isPlaying && (
                 <Audio
                   height="40"
                   width="40"
-                  color="#4fa94d"
+                  color="#009CFF"
                   ariaLabel="audio-loading"
                   wrapperStyle={{}}
                   wrapperClass="wrapper-class"
@@ -259,13 +332,8 @@ const Mic = () => {
               ></a>
             </div>
           ) : null}
-          <div className="flex flex-col justify-start items-start w-1/2 bg-blue-200 rounded-lg p-3">
-            <h2 className="text-lg font-semibold">You</h2>
-            <p className="mt-2 text-sm">{transcription}</p>
-          </div>
         </div>
       )}
-
       <div className="fixed bottom-0 left-0 right-0 bg-blue-100 border-t border-gray-300">
         <div className="flex flex-row justify-between w-full m-2 p-4 ">
           <div className="audio-controls space-y-2 flex flex-row justify-center items-center">
@@ -309,6 +377,15 @@ const Mic = () => {
               </div>
             ) : null}
           </div>
+          <div className="flex flex-row justify-center items-center mb-4">
+            <input
+              type="text"
+              value={textInput}
+              onChange={handleTextInputChange}
+              className="border border-gray-300 p-2 rounded-md w-96" // Adjusted class here
+              placeholder="Type your message..."
+            />
+          </div>
           {audio ? (
             <div className="audio-container flex flex-row justify-center items-center">
               <audio src={audio} controls className="mb-2"></audio>
@@ -340,8 +417,6 @@ const Mic = () => {
             >
               Transcribe
             </button>
-
-            {/*             <audio src={audio1} controls className="mb-2"></audio> */}
           </div>
         </div>
       </div>
