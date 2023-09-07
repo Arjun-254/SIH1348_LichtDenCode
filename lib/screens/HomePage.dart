@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:sih/constants.dart';
-import 'package:sih/helpers/radialPainterIndicator.dart';
 import 'dart:convert';
 import 'dart:io';
 import 'package:path/path.dart';
@@ -12,7 +12,6 @@ import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
 import '../models/AudioModel.dart';
 import '../helpers/Utils.dart';
-import '../helpers/liquidPainter.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -37,7 +36,7 @@ class _HomePageState extends State<HomePage>
   late AnimationController _controller;
   final recorder = FlutterSoundRecorder();
   final player = FlutterSoundPlayer();
-  bool isRecorderReady = false, gotSomeTextYo = false, isPlaying = true;
+  bool isRecorderReady = false, gotSomeTextYo = false, isPlaying = false;
   var lst = [];
 
   Future record() async {
@@ -52,7 +51,7 @@ class _HomePageState extends State<HomePage>
     if (kDebugMode) {
       print('Recorded audio: $path');
     }
-    await player.startPlayer(fromURI: path, codec: Codec.aacADTS);
+    //await player.startPlayer(fromURI: path, codec: Codec.aacADTS);
     lst = await sendAudio(audioPath);
     if (kDebugMode) {
       print(lst);
@@ -108,133 +107,182 @@ class _HomePageState extends State<HomePage>
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
-    print(height);
-    print(width);
 
     return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text(
-            'Language translator',
-            style: TextStyle(color: Colors.white),
-          ),
-          backgroundColor: Colors.white54,
+      child: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [Colors.white, Colors.blue[200]!, Colors.cyan[300]!]),
         ),
-        backgroundColor: const Color(0xFF232424),
-        body: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            StreamBuilder<RecordingDisposition>(
-                stream: recorder.onProgress,
-                builder: (context, snapshot) {
-                  final duration = snapshot.hasData
-                      ? snapshot.data!.duration
-                      : Duration.zero;
-                  String twoDigits(int n) => n.toString().padLeft(2, '0');
-                  final twoDigitMinutes =
-                      twoDigits(duration.inMinutes.remainder(60));
-                  final twoDigitSeconds =
-                      twoDigits(duration.inSeconds.remainder(60));
-                  return Text(
-                    "$twoDigitMinutes:$twoDigitSeconds s",
-                    style: const TextStyle(
+        child: Scaffold(
+          backgroundColor: Colors.transparent,
+          body: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              const Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Text(
+                  "Record Audio. Resolve queries",
+                  style: TextStyle(
+                      fontFamily: "productSansReg",
+                      color: Color(0xFF009CFF),
+                      fontWeight: FontWeight.w700,
+                      fontSize: 25),
+                ),
+              ),
+              SizedBox(
+                height: 100 * (height / deviceHeight),
+              ),
+              StreamBuilder<RecordingDisposition>(
+                  stream: recorder.onProgress,
+                  builder: (context, snapshot) {
+                    final duration = snapshot.hasData
+                        ? snapshot.data!.duration
+                        : Duration.zero;
+                    String twoDigits(int n) => n.toString().padLeft(2, '0');
+                    final twoDigitMinutes =
+                    twoDigits(duration.inMinutes.remainder(60));
+                    final twoDigitSeconds =
+                    twoDigits(duration.inSeconds.remainder(60));
+                    return Text(
+                      "$twoDigitMinutes:$twoDigitSeconds s",
+                      style: const TextStyle(
                         fontSize: 40,
                         fontWeight: FontWeight.bold,
-                        color: Colors.purple),
-                  );
-                }),
-            SizedBox(
-              height: 50 * (height/deviceHeight),
-            ),
-            AnimatedBuilder(
-                animation: _controller,
-                builder: (context, _) {
-                  return Container(
-                    height: 300,
-                    width: 300,
-                    decoration: const BoxDecoration(
-                      shape: BoxShape.circle,
+                        color: Color(0xFF009CFF),
+                        fontFamily: "productSansReg",
+                      ),
+                    );
+                  }),
+              SizedBox(
+                height: 50 * (height / deviceHeight),
+              ),
+              // AnimatedBuilder(
+              //     animation: _controller,
+              //     builder: (context, _) {
+              //       return Container(
+              //         height: 300,
+              //         width: 300,
+              //         decoration: const BoxDecoration(
+              //           shape: BoxShape.circle,
+              //         ),
+              //         child: Stack(
+              //           fit: StackFit.expand,
+              //           children: [
+              //             Padding(
+              //               padding: const EdgeInsets.all(5.0),
+              //               child: CustomPaint(
+              //                 painter: LiquidPainter(
+              //                   _controller.value * maxDuration,
+              //                   maxDuration.toDouble(),
+              //                 ),
+              //               ),
+              //             ),
+              //             CustomPaint(
+              //                 painter: RadialProgressPainter(
+              //               value: _controller.value * maxDuration,
+              //               backgroundGradientColors: gradientColors,
+              //               minValue: 0,
+              //               maxValue: maxDuration.toDouble(),
+              //             )),
+              //           ],
+              //         ),
+              //       );
+              //     }),
+              if (isPlaying)
+                Center(
+                    child: LoadingAnimationWidget.staggeredDotsWave(
+                      color: const Color(0xFF009CFF),
+                      size: 50 * (height / deviceHeight),
+                    )),
+              if (!isPlaying)
+                SizedBox(
+                  height: 50 * (height / deviceHeight),
+                  child: gotSomeTextYo
+                      ? Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      lst[0],
+                      style: const TextStyle(
+                          fontSize: 15.0,
+                          fontWeight: FontWeight.w700,
+                          fontFamily: "productSansReg",
+                          color: Color(0xFF009CFF)),
                     ),
-                    child: Stack(
-                      fit: StackFit.expand,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(5.0),
-                          child: CustomPaint(
-                            painter: LiquidPainter(
-                              _controller.value * maxDuration,
-                              maxDuration.toDouble(),
-                            ),
-                          ),
-                        ),
-                        CustomPaint(
-                            painter: RadialProgressPainter(
-                          value: _controller.value * maxDuration,
-                          backgroundGradientColors: gradientColors,
-                          minValue: 0,
-                          maxValue: maxDuration.toDouble(),
-                        )),
-                      ],
-                    ),
-                  );
-                }),
-            SizedBox(
-              height: 50 * (height/deviceHeight),
-            ),
-            // Start and Stop Button
-            Container(
-              alignment: Alignment.center,
-              height: 60,
-              decoration: BoxDecoration(
-                  border: Border.all(
-                    color: Colors.white54,
-                    width: 2,
+                  )
+                      : const Padding(
+                    padding: EdgeInsets.all(8.0),
                   ),
-                  shape: BoxShape.circle),
-              child: GestureDetector(
-                onTap: () async {
-                  if (recorder.isRecording) {
-                    isPlaying = false;
-                    await stop();
-                    _controller.reset();
-                  } else {
-                    await record();
-                    isPlaying = true;
-                    _controller.reset();
-                    _controller.forward();
-                  }
-                  setState(() {});
-                },
-                child: AnimatedContainer(
-                  height: isPlaying ? 25 : 60,
-                  width: isPlaying ? 25 : 60,
-                  duration: const Duration(milliseconds: 300),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(isPlaying ? 4 : 100),
-                    color: Colors.white54,
+                ),
+              SizedBox(
+                height: 50 * (height / deviceHeight),
+              ),
+              // Start and Stop Button
+              Container(
+                alignment: Alignment.center,
+                height: 60 * (height / deviceHeight),
+                decoration: BoxDecoration(
+                    border: Border.all(
+                      color: Colors.black,
+                      width: 2,
+                    ),
+                    shape: BoxShape.circle),
+                child: GestureDetector(
+                  onTap: () async {
+                    if (recorder.isRecording) {
+                      isPlaying = false;
+                      await stop();
+                      _controller.reset();
+                    } else {
+                      await record();
+                      isPlaying = true;
+                      _controller.reset();
+                      _controller.forward();
+                    }
+                    setState(() {});
+                  },
+                  child: AnimatedContainer(
+                    height: isPlaying
+                        ? 25 * (height / deviceHeight)
+                        : 50 * (height / deviceHeight),
+                    width: isPlaying
+                        ? 25 * (height / deviceHeight)
+                        : 50 * (height / deviceHeight),
+                    duration: const Duration(milliseconds: 300),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(isPlaying ? 6 : 100),
+                      color: Colors.white,
+                    ),
                   ),
                 ),
               ),
-            ),
-            SizedBox(
-              height: 35 * (height/deviceHeight),
-            ),
-            if (gotSomeTextYo)
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  lst[0],
-                  style: const TextStyle(
-                      fontSize: 15.0,
-                      fontWeight: FontWeight.w700,
-                      fontFamily: "productSansReg",
-                      color: Colors.purple),
-                ),
-              )
-          ],
+              SizedBox(
+                height: 35 * (height / deviceHeight),
+              ),
+            ],
+          ),
         ),
       ),
     );
+  }
+
+  Future getAudio(String text) async {
+    var res = await http.post(
+      Uri.parse('https://97fd-34-124-150-43.ngrok-free.app/coqui-tts/'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(
+          <String, String>{"text": text, 'emotion': "Cheerful & Professional"}),
+    );
+    if (res.statusCode == 200) {
+      if (kDebugMode) {
+        print(res.bodyBytes);
+      }
+      await player.startPlayer(fromDataBuffer: res.bodyBytes);
+    }
   }
 
   Future<List<Object?>> sendAudio(File? audioPath) async {
@@ -243,7 +291,7 @@ class _HomePageState extends State<HomePage>
     }
     var response = http.MultipartRequest(
       'POST',
-      Uri.parse('https://6a83-34-133-155-148.ngrok-free.app/transcribe/'),
+      Uri.parse('https://97fd-34-124-150-43.ngrok-free.app/transcribe/'),
     );
     response.files.add(http.MultipartFile(
         'file', audioPath!.readAsBytes().asStream(), audioPath.lengthSync(),
@@ -256,14 +304,18 @@ class _HomePageState extends State<HomePage>
       print(res.statusCode);
     }
     if (res.statusCode != 200) {
-      Utils.showSnackBar("Error occurred!.");
+      Utils.showSnackBar("Error occurred!");
     }
 
     Map<String, dynamic> data = jsonDecode(responseBody);
     var stuff = Audio.fromJson(data);
-    if (kDebugMode) {
-      print(stuff.text);
+    if (res.statusCode == 200) {
+      await getAudio(stuff.text!);
+      if (kDebugMode) {
+        print(stuff.text);
+      }
     }
+
     return [stuff.text, res.statusCode];
   }
 
