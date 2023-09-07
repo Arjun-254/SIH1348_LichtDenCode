@@ -271,7 +271,7 @@ class _HomePageState extends State<HomePage>
 
   Future getAudio(String text) async {
     var res = await http.post(
-      Uri.parse('https://97fd-34-124-150-43.ngrok-free.app/coqui-tts/'),
+      Uri.parse('https://8cbc-35-238-163-220.ngrok-free.app/coqui-tts/'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -286,13 +286,28 @@ class _HomePageState extends State<HomePage>
     }
   }
 
+  Future getNER(String text) async {
+    var res = await http.post(
+      Uri.parse('https://8cbc-35-238-163-220.ngrok-free.app/ner/'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{"text": text}),
+    );
+    if (res.statusCode == 200) {
+      if (kDebugMode) {
+        print(res.body);
+      }
+    }
+  }
+
   Future<List<Object?>> sendAudio(File? audioPath) async {
     if (kDebugMode) {
       print(audioPath!.path);
     }
     var response = http.MultipartRequest(
       'POST',
-      Uri.parse('https://97fd-34-124-150-43.ngrok-free.app/transcribe/'),
+      Uri.parse('https://8cbc-35-238-163-220.ngrok-free.app/transcribe/'),
     );
     response.files.add(http.MultipartFile(
         'file', audioPath!.readAsBytes().asStream(), audioPath.lengthSync(),
@@ -312,6 +327,7 @@ class _HomePageState extends State<HomePage>
     var stuff = Audio.fromJson(data);
     if (res.statusCode == 200) {
       await getAudio(stuff.text!);
+      await getNER(stuff.text!);
       if (kDebugMode) {
         print(stuff.text);
       }
