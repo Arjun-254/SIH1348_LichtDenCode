@@ -28,6 +28,9 @@ const Mic = () => {
 
   const [clicktranscribe, setclicktranscribe] = useState(false);
 
+  //NER Endpoint useState
+  const [ner, setNer] = useState([]);
+
   const mimeType = "audio/webm";
   //in built api reference
   const mediaRecorder = useRef(null);
@@ -108,7 +111,7 @@ const Mic = () => {
 
     try {
       const response = await fetch(
-        "https://8529-34-70-136-210.ngrok-free.app/transcribe/",
+        "https://5a43-34-125-44-238.ngrok-free.app/transcribe/",
         {
           method: "POST",
           body: formData,
@@ -131,7 +134,7 @@ const Mic = () => {
   const handleSound = async () => {
     try {
       const response = await fetch(
-        "https://8529-34-70-136-210.ngrok-free.app/coqui-tts/",
+        "https://5a43-34-125-44-238.ngrok-free.app/coqui-tts/",
         {
           method: "POST",
           headers: {
@@ -157,6 +160,37 @@ const Mic = () => {
     }
   };
 
+  // Get Location via NER API CALL
+  const handleNER = async () => {
+    try {
+      const response = await fetch(
+        "https://5a43-34-125-44-238.ngrok-free.app/ner/",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json", // Specify JSON content type
+          },
+          body: JSON.stringify({
+            text: transcription,
+            emotion: "Anger",
+          }),
+        }
+      );
+
+      if (response.ok) {
+        const nerData = await response.json();
+        setNer(nerData.LOC);
+        console.log(transcription);
+        console.log(ner);
+      } else {
+        alert("NER failed");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      alert("Error while fetching location");
+    }
+  };
+
   return (
     <div className="bg-gradient-to-b bg-cover bg-center from-white via-blue-100 to-cyan-300 min-h-screen py-10 px-6">
       {transcription && (
@@ -165,7 +199,14 @@ const Mic = () => {
             onClick={handleSound}
             className="bg-gradient-to-r from-pink-300 via-violet-300 to-purple-400 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-full shadow-md focus:outline-none focus:shadow-outline flex items-center"
           >
-            Reply <span className="mlc-2">&#10132;</span>
+            Speak <span className="mlc-2">&#10132;</span>
+          </button>
+
+          <button
+            onClick={handleNER}
+            className="bg-gradient-to-r from-pink-300 via-violet-300 to-purple-400 hover:bg-blue-700 text-white font-bold py-2 px-6 mx-2 rounded-full shadow-md focus:outline-none focus:shadow-outline flex items-center"
+          >
+            Location <span className="mlc-2">&#10132;</span>
           </button>
 
           {audio1 ? (
@@ -276,7 +317,7 @@ const Mic = () => {
             )}
             <button
               onClick={handleTranscribe}
-              className="bg-gradient-to-r from-pink-300 via-violet-300 to-purple-400 hover:bg-blue-700 text-white font-bold shadow-md py-2 px-6 ml-2 rounded-full focus:outline-none focus:shadow-outline"
+              className=" hover:animate-pulse bg-gradient-to-r from-pink-300 via-violet-300 to-purple-400 hover:bg-blue-700 text-white font-bold shadow-md py-2 px-6 ml-2 rounded-full focus:outline-none focus:shadow-outline"
             >
               Transcribe
             </button>
