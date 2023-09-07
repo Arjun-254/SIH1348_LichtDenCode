@@ -10,6 +10,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
+import 'package:sih/maps/maps.dart';
 import '../models/AudioModel.dart';
 import '../helpers/Utils.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -120,8 +121,10 @@ class _HomePageState extends State<HomePage>
         child: Scaffold(
           backgroundColor: Colors.transparent,
           body: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
+              SizedBox(
+                height: 100 * (height / deviceHeight),
+              ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
@@ -158,7 +161,7 @@ class _HomePageState extends State<HomePage>
                     );
                   }),
               SizedBox(
-                height: 50 * (height / deviceHeight),
+                height: 70 * (height / deviceHeight),
               ),
               // AnimatedBuilder(
               //     animation: _controller,
@@ -200,7 +203,7 @@ class _HomePageState extends State<HomePage>
                 )),
               if (!isPlaying)
                 SizedBox(
-                  height: 50 * (height / deviceHeight),
+                  height: 70 * (height / deviceHeight),
                   child: gotSomeTextYo
                       ? Padding(
                           padding: const EdgeInsets.all(8.0),
@@ -220,7 +223,6 @@ class _HomePageState extends State<HomePage>
               SizedBox(
                 height: 50 * (height / deviceHeight),
               ),
-              // Start and Stop Button
               Container(
                 alignment: Alignment.center,
                 height: 60 * (height / deviceHeight),
@@ -260,7 +262,38 @@ class _HomePageState extends State<HomePage>
                 ),
               ),
               SizedBox(
-                height: 35 * (height / deviceHeight),
+                height: 70 * (height / deviceHeight),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.of(context).push(_createRoute());
+                  },
+                  style: ElevatedButton.styleFrom(
+                      padding: EdgeInsets.zero,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(60))),
+                  child: Ink(
+                    decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                            colors: [Colors.blue[700]!, Colors.blue[500]!]),
+                        borderRadius: BorderRadius.circular(25)),
+                    child: Container(
+                      width: 165 * (height / deviceHeight),
+                      height: 60 * (height / deviceHeight),
+                      alignment: Alignment.center,
+                      child: const Text(
+                        "View Maps",
+                        style: TextStyle(
+                            fontFamily: "productSansReg",
+                            color: Colors.white,
+                            fontWeight: FontWeight.w700,
+                            fontSize: 18),
+                      ),
+                    ),
+                  ),
+                ),
               ),
             ],
           ),
@@ -271,7 +304,7 @@ class _HomePageState extends State<HomePage>
 
   Future getAudio(String text) async {
     var res = await http.post(
-      Uri.parse('https://8cbc-35-238-163-220.ngrok-free.app/coqui-tts/'),
+      Uri.parse('https://d228-34-125-191-35.ngrok-free.app/coqui-tts/'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -294,6 +327,9 @@ class _HomePageState extends State<HomePage>
       },
       body: jsonEncode(<String, String>{"text": text}),
     );
+    if (kDebugMode) {
+      print(res.statusCode);
+    }
     if (res.statusCode == 200) {
       if (kDebugMode) {
         print(res.body);
@@ -307,7 +343,7 @@ class _HomePageState extends State<HomePage>
     }
     var response = http.MultipartRequest(
       'POST',
-      Uri.parse('https://8cbc-35-238-163-220.ngrok-free.app/transcribe/'),
+      Uri.parse('https://d228-34-125-191-35.ngrok-free.app/transcribe/'),
     );
     response.files.add(http.MultipartFile(
         'file', audioPath!.readAsBytes().asStream(), audioPath.lengthSync(),
@@ -341,5 +377,24 @@ class _HomePageState extends State<HomePage>
     final name = basename(path);
     final audio = File('${directory.path}/$name');
     return File(path).copy(audio.path);
+  }
+
+  Route _createRoute() {
+    return PageRouteBuilder(
+      pageBuilder: (context, animation, secondaryAnimation) => const maps(),
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        const begin = Offset(1.0, 0.0);
+        const end = Offset.zero;
+        const curve = Curves.ease;
+
+        var tween =
+            Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
+        return SlideTransition(
+          position: animation.drive(tween),
+          child: child,
+        );
+      },
+    );
   }
 }

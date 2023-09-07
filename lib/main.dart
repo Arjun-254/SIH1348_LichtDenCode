@@ -1,28 +1,9 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:sih/language/changeLanguageDropdown.dart';
-import 'package:sih/screens/robot.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:sih/l10n/l10n.dart';
-
-// Future main() async {
-//   WidgetsFlutterBinding.ensureInitialized();
-//   runApp(
-//     MaterialApp(
-//       debugShowCheckedModeBanner: false,
-//       supportedLocales: L10n.all,
-//       locale: const Locale('mr'),
-//       localizationsDelegates: const [
-//         AppLocalizations.delegate,
-//         GlobalMaterialLocalizations.delegate,
-//         GlobalWidgetsLocalizations.delegate,
-//         GlobalCupertinoLocalizations.delegate
-//       ],
-//       home: const Robot(),
-//     ),
-//   );
-// }
-
 import 'package:flutter/cupertino.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -39,7 +20,9 @@ class MainApp extends StatefulWidget {
 
     var prefs = await SharedPreferences.getInstance();
     prefs.setString('languageCode', newLocale.languageCode);
-    print(newLocale.languageCode);
+    if (kDebugMode) {
+      print(newLocale.languageCode);
+    }
     state?.setState(() {
       state._locale = newLocale;
     });
@@ -72,7 +55,9 @@ class _MainAppState extends State<MainApp> {
 
   @override
   Widget build(BuildContext context) {
-    print(_locale.countryCode);
+    if (kDebugMode) {
+      print(_locale.countryCode);
+    }
     return MaterialApp(
       locale: _locale,
       debugShowCheckedModeBanner: false,
