@@ -12,6 +12,7 @@ import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
 import '../models/AudioModel.dart';
 import '../helpers/Utils.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -121,11 +122,11 @@ class _HomePageState extends State<HomePage>
           body: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              const Padding(
-                padding: EdgeInsets.all(8.0),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
                 child: Text(
-                  "Record Audio. Resolve queries",
-                  style: TextStyle(
+                  AppLocalizations.of(context)!.recordResolve,
+                  style: const TextStyle(
                       fontFamily: "productSansReg",
                       color: Color(0xFF009CFF),
                       fontWeight: FontWeight.w700,
@@ -143,9 +144,9 @@ class _HomePageState extends State<HomePage>
                         : Duration.zero;
                     String twoDigits(int n) => n.toString().padLeft(2, '0');
                     final twoDigitMinutes =
-                    twoDigits(duration.inMinutes.remainder(60));
+                        twoDigits(duration.inMinutes.remainder(60));
                     final twoDigitSeconds =
-                    twoDigits(duration.inSeconds.remainder(60));
+                        twoDigits(duration.inSeconds.remainder(60));
                     return Text(
                       "$twoDigitMinutes:$twoDigitSeconds s",
                       style: const TextStyle(
@@ -194,27 +195,27 @@ class _HomePageState extends State<HomePage>
               if (isPlaying)
                 Center(
                     child: LoadingAnimationWidget.staggeredDotsWave(
-                      color: const Color(0xFF009CFF),
-                      size: 50 * (height / deviceHeight),
-                    )),
+                  color: const Color(0xFF009CFF),
+                  size: 50 * (height / deviceHeight),
+                )),
               if (!isPlaying)
                 SizedBox(
                   height: 50 * (height / deviceHeight),
                   child: gotSomeTextYo
                       ? Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      lst[0],
-                      style: const TextStyle(
-                          fontSize: 15.0,
-                          fontWeight: FontWeight.w700,
-                          fontFamily: "productSansReg",
-                          color: Color(0xFF009CFF)),
-                    ),
-                  )
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            lst[0],
+                            style: const TextStyle(
+                                fontSize: 15.0,
+                                fontWeight: FontWeight.w700,
+                                fontFamily: "productSansReg",
+                                color: Color(0xFF009CFF)),
+                          ),
+                        )
                       : const Padding(
-                    padding: EdgeInsets.all(8.0),
-                  ),
+                          padding: EdgeInsets.all(8.0),
+                        ),
                 ),
               SizedBox(
                 height: 50 * (height / deviceHeight),

@@ -1,0 +1,22 @@
+{
+    "language": "English",
+    "@language": {
+        "description": "The current Language"
+    },
+    "meetAtom": "Meet Atom.",
+    "@meetAtom": {
+        "description": "App attention grabber"
+    },
+    "aiPoweredAsst": "An AI powered assistant, assembled to resolve all your queries.",
+    "@iPoweredAsst": {
+        "description": "catchphrase"
+    },
+    "tryItOut": "Try it out.",
+    "@tryItOut": {
+        "description": "For a button"
+    },
+    "recordResolve": "Record audio. Resolve queries.",
+    "@recordResolve": {
+        "description": "Recorder page"
+    }
+}
