@@ -43,6 +43,7 @@ const Mic = () => {
   const [ner, setNer] = useState([]);
 
   const mimeType = "audio/webm";
+  const ngrokurl = "https://cfb5-34-125-191-35.ngrok-free.app";
   //in built api reference
   const mediaRecorder = useRef(null);
 
@@ -126,7 +127,7 @@ const Mic = () => {
 
       try {
         const response = await fetch(
-          "https://75b0-34-125-191-35.ngrok-free.app/transcribe/",
+          "${ngrokurl}/transcribe/",
           {
             method: "POST",
             body: formData,
@@ -153,7 +154,7 @@ const Mic = () => {
     setclickspeak(true);
     try {
       const response = await fetch(
-        "https://75b0-34-125-191-35.ngrok-free.app/coqui-tts/",
+        "${ngrokurl}/coqui-tts/",
         {
           method: "POST",
           headers: {
@@ -184,7 +185,7 @@ const Mic = () => {
   const handleNER = async () => {
     try {
       const response = await fetch(
-        "https://75b0-34-125-191-35.ngrok-free.app/ner/",
+        "${ngrokurl}/ner/",
         {
           method: "POST",
           headers: {
@@ -223,7 +224,7 @@ const Mic = () => {
   const falconResponse = async () => {
     try {
       const response = await fetch(
-        "https://75b0-34-125-191-35.ngrok-free.app/chat/",
+        "${ngrokurl}/chat/",
         {
           method: "POST",
           headers: {
