@@ -18,5 +18,13 @@
     "recordResolve": "Record audio. Resolve queries.",
     "@recordResolve": {
         "description": "Recorder page"
+    },
+    "proceed": "Proceed",
+    "@proceed": {
+        "description": "For language dropdown"
+    },
+    "chooseLanguage": "Choose a language.",
+    "@chooseLanguage": {
+        "description": "For language selection"
     }
 }
