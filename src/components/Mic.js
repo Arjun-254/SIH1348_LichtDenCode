@@ -159,7 +159,7 @@ const Mic = () => {
 
   return (
     <div className="bg-gradient-to-b bg-cover bg-center from-white via-blue-100 to-cyan-300 min-h-screen py-10 px-6">
-      {true && (
+      {transcription && (
         <div className="flex flex-row justify-end items-center ml-auto">
           <button
             onClick={handleSound}
@@ -168,7 +168,7 @@ const Mic = () => {
             Reply <span className="mlc-2">&#10132;</span>
           </button>
 
-          {true ? (
+          {audio1 ? (
             <div className="audio-container flex flex-row items-center mt-2 mx-4">
               {isPlaying && (
                 <Audio
