@@ -127,7 +127,7 @@ const Mic = () => {
 
       try {
         const response = await fetch(
-          "${ngrokurl}/transcribe/",
+          ngrokurl+"/transcribe/",
           {
             method: "POST",
             body: formData,
@@ -154,7 +154,7 @@ const Mic = () => {
     setclickspeak(true);
     try {
       const response = await fetch(
-        "${ngrokurl}/coqui-tts/",
+        ngrokurl+"/coqui-tts/",
         {
           method: "POST",
           headers: {
@@ -185,7 +185,7 @@ const Mic = () => {
   const handleNER = async () => {
     try {
       const response = await fetch(
-        "${ngrokurl}/ner/",
+        ngrokurl+"/ner/",
         {
           method: "POST",
           headers: {
@@ -224,7 +224,7 @@ const Mic = () => {
   const falconResponse = async () => {
     try {
       const response = await fetch(
-        "${ngrokurl}/chat/",
+        ngrokurl+"/chat/",
         {
           method: "POST",
           headers: {
