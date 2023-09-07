@@ -1,5 +1,5 @@
 import React, { useState, useRef } from "react";
-import { Bars, CirclesWithBar, Audio } from "react-loader-spinner";
+import { Bars, CirclesWithBar, Audio, Puff } from "react-loader-spinner";
 
 const Mic = () => {
   // State variables
@@ -27,6 +27,8 @@ const Mic = () => {
   const [isPlaying, setIsPlaying] = useState(false);
 
   const [clicktranscribe, setclicktranscribe] = useState(false);
+
+  const [clickspeak, setclickspeak] = useState(false);
 
   //NER Endpoint useState
   const [ner, setNer] = useState([]);
@@ -111,7 +113,7 @@ const Mic = () => {
 
     try {
       const response = await fetch(
-        "https://5a43-34-125-44-238.ngrok-free.app/transcribe/",
+        "https://8cbc-35-238-163-220.ngrok-free.app/transcribe/",
         {
           method: "POST",
           body: formData,
@@ -132,9 +134,10 @@ const Mic = () => {
   };
 
   const handleSound = async () => {
+    setclickspeak(true);
     try {
       const response = await fetch(
-        "https://5a43-34-125-44-238.ngrok-free.app/coqui-tts/",
+        "https://8cbc-35-238-163-220.ngrok-free.app/coqui-tts/",
         {
           method: "POST",
           headers: {
@@ -158,13 +161,14 @@ const Mic = () => {
       console.error("Error:", error);
       alert("An error occurred while replying to the audio");
     }
+    setclickspeak(false);
   };
 
   // Get Location via NER API CALL
   const handleNER = async () => {
     try {
       const response = await fetch(
-        "https://5a43-34-125-44-238.ngrok-free.app/ner/",
+        "https://8cbc-35-238-163-220.ngrok-free.app/ner/",
         {
           method: "POST",
           headers: {
@@ -182,6 +186,8 @@ const Mic = () => {
         setNer(nerData.LOC);
         console.log(transcription);
         console.log(ner);
+        const url = `https://www.google.com/maps/dir/${ner[0]}+station/${ner[1]}+station`;
+        window.open(url, "_blank", "noreferrer");
       } else {
         alert("NER failed");
       }
@@ -199,14 +205,27 @@ const Mic = () => {
             onClick={handleSound}
             className="bg-gradient-to-r from-pink-300 via-violet-300 to-purple-400 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-full shadow-md focus:outline-none focus:shadow-outline flex items-center"
           >
-            Speak <span className="mlc-2">&#10132;</span>
+            Speak
+            {clickspeak && (
+              <Puff
+                height="30"
+                width="30"
+                radius={1}
+                color="#4fa94d"
+                ariaLabel="puff-loading"
+                wrapperStyle={{}}
+                wrapperClass=""
+                visible={true}
+              />
+            )}
+            <span className="mlc-2">&#10132;</span>
           </button>
 
           <button
             onClick={handleNER}
             className="bg-gradient-to-r from-pink-300 via-violet-300 to-purple-400 hover:bg-blue-700 text-white font-bold py-2 px-6 mx-2 rounded-full shadow-md focus:outline-none focus:shadow-outline flex items-center"
           >
-            Location <span className="mlc-2">&#10132;</span>
+            Get Route <span className="mlc-2">&#10132;</span>
           </button>
 
           {audio1 ? (

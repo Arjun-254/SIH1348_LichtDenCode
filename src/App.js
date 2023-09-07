@@ -8,6 +8,7 @@ import {
 } from "react-router-dom";
 import { BrowserRouter } from "react-router-dom";
 import { Assistant } from "./pages/Assistant";
+import  Map  from "./components/Map";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Landing />} />
           <Route path="/Assistant" element={<Assistant />} />
+          <Route path="/Map" element={<Map />} />
         </Routes>
       </BrowserRouter>
     </div>
