@@ -121,182 +121,186 @@ class _HomePageState extends State<HomePage>
         ),
         child: Scaffold(
           backgroundColor: Colors.transparent,
-          body: Column(
-            children: [
-              SizedBox(
-                height: 100 * (height / deviceHeight),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  AppLocalizations.of(context)!.recordResolve,
-                  style: const TextStyle(
-                      fontFamily: "productSansReg",
-                      color: Color(0xFF009CFF),
-                      fontWeight: FontWeight.w700,
-                      fontSize: 25),
-                ),
-              ),
-              SizedBox(
-                height: 100 * (height / deviceHeight),
-              ),
-              StreamBuilder<RecordingDisposition>(
-                  stream: recorder.onProgress,
-                  builder: (context, snapshot) {
-                    final duration = snapshot.hasData
-                        ? snapshot.data!.duration
-                        : Duration.zero;
-                    String twoDigits(int n) => n.toString().padLeft(2, '0');
-                    final twoDigitMinutes =
-                        twoDigits(duration.inMinutes.remainder(60));
-                    final twoDigitSeconds =
-                        twoDigits(duration.inSeconds.remainder(60));
-                    return Text(
-                      "$twoDigitMinutes:$twoDigitSeconds s",
-                      style: const TextStyle(
-                        fontSize: 40,
-                        fontWeight: FontWeight.bold,
-                        color: Color(0xFF009CFF),
-                        fontFamily: "productSansReg",
-                      ),
-                    );
-                  }),
-              SizedBox(
-                height: 70 * (height / deviceHeight),
-              ),
-              // AnimatedBuilder(
-              //     animation: _controller,
-              //     builder: (context, _) {
-              //       return Container(
-              //         height: 300,
-              //         width: 300,
-              //         decoration: const BoxDecoration(
-              //           shape: BoxShape.circle,
-              //         ),
-              //         child: Stack(
-              //           fit: StackFit.expand,
-              //           children: [
-              //             Padding(
-              //               padding: const EdgeInsets.all(5.0),
-              //               child: CustomPaint(
-              //                 painter: LiquidPainter(
-              //                   _controller.value * maxDuration,
-              //                   maxDuration.toDouble(),
-              //                 ),
-              //               ),
-              //             ),
-              //             CustomPaint(
-              //                 painter: RadialProgressPainter(
-              //               value: _controller.value * maxDuration,
-              //               backgroundGradientColors: gradientColors,
-              //               minValue: 0,
-              //               maxValue: maxDuration.toDouble(),
-              //             )),
-              //           ],
-              //         ),
-              //       );
-              //     }),
-              if (isPlaying)
-                Center(
-                    child: LoadingAnimationWidget.staggeredDotsWave(
-                  color: const Color(0xFF009CFF),
-                  size: 50 * (height / deviceHeight),
-                )),
-              if (!isPlaying)
+          body: SingleChildScrollView(
+            physics: const AlwaysScrollableScrollPhysics(),
+            child: Column(
+              children: [
                 SizedBox(
-                  height: 150 * (height / deviceHeight),
-                  child: gotSomeTextYo
-                      ? Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            lst[0],
-                            style: const TextStyle(
-                                fontSize: 15.0,
-                                fontWeight: FontWeight.w700,
-                                fontFamily: "productSansReg",
-                                color: Color(0xFF009CFF)),
-                          ),
-                        )
-                      : const Padding(
-                          padding: EdgeInsets.all(8.0),
-                        ),
+                  height: 50 * (height / deviceHeight),
                 ),
-              SizedBox(
-                height: 50 * (height / deviceHeight),
-              ),
-              Container(
-                alignment: Alignment.center,
-                height: 60 * (height / deviceHeight),
-                decoration: BoxDecoration(
-                    border: Border.all(
-                      color: Colors.black,
-                      width: 2,
-                    ),
-                    shape: BoxShape.circle),
-                child: GestureDetector(
-                  onTap: () async {
-                    if (recorder.isRecording) {
-                      isPlaying = false;
-                      await stop();
-                      _controller.reset();
-                    } else {
-                      await record();
-                      isPlaying = true;
-                      _controller.reset();
-                      _controller.forward();
-                    }
-                    setState(() {});
-                  },
-                  child: AnimatedContainer(
-                    height: isPlaying
-                        ? 25 * (height / deviceHeight)
-                        : 50 * (height / deviceHeight),
-                    width: isPlaying
-                        ? 25 * (height / deviceHeight)
-                        : 50 * (height / deviceHeight),
-                    duration: const Duration(milliseconds: 300),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(isPlaying ? 6 : 100),
-                      color: Colors.white,
-                    ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    AppLocalizations.of(context)!.recordResolve,
+                    style: const TextStyle(
+                        fontFamily: "productSansReg",
+                        color: Color(0xFF009CFF),
+                        fontWeight: FontWeight.w700,
+                        fontSize: 25),
                   ),
                 ),
-              ),
-              SizedBox(
-                height: 70 * (height / deviceHeight),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.of(context).push(_createRoute());
-                  },
-                  style: ElevatedButton.styleFrom(
-                      padding: EdgeInsets.zero,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(60))),
-                  child: Ink(
-                    decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                            colors: [Colors.blue[700]!, Colors.blue[500]!]),
-                        borderRadius: BorderRadius.circular(25)),
-                    child: Container(
-                      width: 165 * (height / deviceHeight),
-                      height: 60 * (height / deviceHeight),
-                      alignment: Alignment.center,
-                      child: const Text(
-                        "View Maps",
-                        style: TextStyle(
-                            fontFamily: "productSansReg",
-                            color: Colors.white,
-                            fontWeight: FontWeight.w700,
-                            fontSize: 18),
+                SizedBox(
+                  height: 100 * (height / deviceHeight),
+                ),
+                StreamBuilder<RecordingDisposition>(
+                    stream: recorder.onProgress,
+                    builder: (context, snapshot) {
+                      final duration = snapshot.hasData
+                          ? snapshot.data!.duration
+                          : Duration.zero;
+                      String twoDigits(int n) => n.toString().padLeft(2, '0');
+                      final twoDigitMinutes =
+                          twoDigits(duration.inMinutes.remainder(60));
+                      final twoDigitSeconds =
+                          twoDigits(duration.inSeconds.remainder(60));
+                      return Text(
+                        "$twoDigitMinutes:$twoDigitSeconds s",
+                        style: const TextStyle(
+                          fontSize: 40,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFF009CFF),
+                          fontFamily: "productSansReg",
+                        ),
+                      );
+                    }),
+                SizedBox(
+                  height: 70 * (height / deviceHeight),
+                ),
+                // AnimatedBuilder(
+                //     animation: _controller,
+                //     builder: (context, _) {
+                //       return Container(
+                //         height: 300,
+                //         width: 300,
+                //         decoration: const BoxDecoration(
+                //           shape: BoxShape.circle,
+                //         ),
+                //         child: Stack(
+                //           fit: StackFit.expand,
+                //           children: [
+                //             Padding(
+                //               padding: const EdgeInsets.all(5.0),
+                //               child: CustomPaint(
+                //                 painter: LiquidPainter(
+                //                   _controller.value * maxDuration,
+                //                   maxDuration.toDouble(),
+                //                 ),
+                //               ),
+                //             ),
+                //             CustomPaint(
+                //                 painter: RadialProgressPainter(
+                //               value: _controller.value * maxDuration,
+                //               backgroundGradientColors: gradientColors,
+                //               minValue: 0,
+                //               maxValue: maxDuration.toDouble(),
+                //             )),
+                //           ],
+                //         ),
+                //       );
+                //     }),
+                if (isPlaying)
+                  Center(
+                      child: LoadingAnimationWidget.staggeredDotsWave(
+                    color: const Color(0xFF009CFF),
+                    size: 50 * (height / deviceHeight),
+                  )),
+                if (!isPlaying)
+                  SizedBox(
+                    height: 150 * (height / deviceHeight),
+                    child: gotSomeTextYo
+                        ? Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              lst[0],
+                              style: const TextStyle(
+                                  fontSize: 15.0,
+                                  fontWeight: FontWeight.w700,
+                                  fontFamily: "productSansReg",
+                                  color: Color(0xFF009CFF)),
+                            ),
+                          )
+                        : const Padding(
+                            padding: EdgeInsets.all(8.0),
+                          ),
+                  ),
+                SizedBox(
+                  height: 50 * (height / deviceHeight),
+                ),
+                Container(
+                  alignment: Alignment.center,
+                  height: 60 * (height / deviceHeight),
+                  decoration: BoxDecoration(
+                      border: Border.all(
+                        color: Colors.black,
+                        width: 2,
+                      ),
+                      shape: BoxShape.circle),
+                  child: GestureDetector(
+                    onTap: () async {
+                      if (recorder.isRecording) {
+                        isPlaying = false;
+                        await stop();
+                        _controller.reset();
+                      } else {
+                        await record();
+                        isPlaying = true;
+                        _controller.reset();
+                        _controller.forward();
+                      }
+                      setState(() {});
+                    },
+                    child: AnimatedContainer(
+                      height: isPlaying
+                          ? 25 * (height / deviceHeight)
+                          : 50 * (height / deviceHeight),
+                      width: isPlaying
+                          ? 25 * (height / deviceHeight)
+                          : 50 * (height / deviceHeight),
+                      duration: const Duration(milliseconds: 300),
+                      decoration: BoxDecoration(
+                        borderRadius:
+                            BorderRadius.circular(isPlaying ? 6 : 100),
+                        color: Colors.white,
                       ),
                     ),
                   ),
                 ),
-              ),
-            ],
+                SizedBox(
+                  height: 70 * (height / deviceHeight),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.of(context).push(_createRoute());
+                    },
+                    style: ElevatedButton.styleFrom(
+                        padding: EdgeInsets.zero,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(60))),
+                    child: Ink(
+                      decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                              colors: [Colors.blue[700]!, Colors.blue[500]!]),
+                          borderRadius: BorderRadius.circular(25)),
+                      child: Container(
+                        width: 165 * (height / deviceHeight),
+                        height: 60 * (height / deviceHeight),
+                        alignment: Alignment.center,
+                        child: Text(
+                          AppLocalizations.of(context)!.chooseMap,
+                          style: const TextStyle(
+                              fontFamily: "productSansReg",
+                              color: Colors.white,
+                              fontWeight: FontWeight.w700,
+                              fontSize: 18),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

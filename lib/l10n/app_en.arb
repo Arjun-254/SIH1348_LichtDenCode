@@ -26,5 +26,9 @@
     "chooseLanguage": "Choose a language.",
     "@chooseLanguage": {
         "description": "For language selection"
+    },
+    "chooseMap": "View Maps",
+    "@chooseMap": {
+        "description": "For viewing maps"
     }
 }
