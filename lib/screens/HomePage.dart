@@ -309,7 +309,7 @@ class _HomePageState extends State<HomePage>
 
   Future getAudio(String text) async {
     var res = await http.post(
-      Uri.parse('https://75b0-34-125-191-35.ngrok-free.app/coqui-tts/'),
+      Uri.parse('https://3f61-34-124-150-43.ngrok-free.app/coqui-tts/'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -326,7 +326,7 @@ class _HomePageState extends State<HomePage>
 
   Future getNER(String text) async {
     var res = await http.post(
-      Uri.parse('https://75b0-34-125-191-35.ngrok-free.app/ner/'),
+      Uri.parse('https://3f61-34-124-150-43.ngrok-free.app/ner/'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -344,7 +344,7 @@ class _HomePageState extends State<HomePage>
 
   Future<List<Object?>> getLLMResponse(String text) async {
     var res = await http.post(
-      Uri.parse('https://75b0-34-125-191-35.ngrok-free.app/chat/'),
+      Uri.parse('https://3f61-34-124-150-43.ngrok-free.app/chat/'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -371,7 +371,7 @@ class _HomePageState extends State<HomePage>
     }
     var response = http.MultipartRequest(
       'POST',
-      Uri.parse('https://75b0-34-125-191-35.ngrok-free.app/transcribe/'),
+      Uri.parse('https://3f61-34-124-150-43.ngrok-free.app/transcribe/'),
     );
     response.files.add(http.MultipartFile(
         'file', audioPath!.readAsBytes().asStream(), audioPath.lengthSync(),
