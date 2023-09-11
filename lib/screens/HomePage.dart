@@ -16,7 +16,7 @@ import '../helpers/Utils.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 var lst = [];
-String ngrokurl = "https://3f61-34-124-150-43.ngrok-free.app"
+String ngrokurl = "https://3f61-34-124-150-43.ngrok-free.app";
   
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -310,7 +310,7 @@ class _HomePageState extends State<HomePage>
 
   Future getAudio(String text) async {
     var res = await http.post(
-      Uri.parse('${ngrokurl}/coqui-tts/'),
+      Uri.parse('$ngrokurl/coqui-tts/'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -327,7 +327,7 @@ class _HomePageState extends State<HomePage>
 
   Future getNER(String text) async {
     var res = await http.post(
-      Uri.parse('${ngrokurl}/ner/'),
+      Uri.parse('$ngrokurl/ner/'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -345,7 +345,7 @@ class _HomePageState extends State<HomePage>
 
   Future<List<Object?>> getLLMResponse(String text) async {
     var res = await http.post(
-      Uri.parse('${ngrokurl}/chat/'),
+      Uri.parse('$ngrokurl/chat/'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -372,7 +372,7 @@ class _HomePageState extends State<HomePage>
     }
     var response = http.MultipartRequest(
       'POST',
-      Uri.parse('${ngrokurl}/transcribe/'),
+      Uri.parse('$ngrokurl/transcribe/'),
     );
     response.files.add(http.MultipartFile(
         'file', audioPath!.readAsBytes().asStream(), audioPath.lengthSync(),
