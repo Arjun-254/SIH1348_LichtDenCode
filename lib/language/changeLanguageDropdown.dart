@@ -1,5 +1,6 @@
 import 'package:lottie/lottie.dart';
 import 'package:model_viewer_plus/model_viewer_plus.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sih/main.dart';
 import 'package:flutter/material.dart';
 import 'package:sih/screens/robot.dart';
@@ -60,9 +61,11 @@ class _SelectLanguageDropdownState extends State<SelectLanguageDropdown> {
                     Padding(
                       padding: const EdgeInsets.all(40.0),
                       child: DropdownButtonFormField(
-                        onChanged: (v) => setState(() {
+                        onChanged: (v) => setState(() async {
                           MainApp.setLocale(context, Locale(v.toString()));
                           selectedVal = v!;
+                          var prefs = await SharedPreferences.getInstance();
+                          prefs.setString('languageCode', v);
                         }),
                         value: selectedVal,
                         items: const [

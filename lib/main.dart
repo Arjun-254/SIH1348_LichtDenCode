@@ -6,6 +6,8 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:sih/l10n/l10n.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:adaptive_theme/adaptive_theme.dart';
+import 'helpers/Utils.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -49,7 +51,9 @@ class _MainAppState extends State<MainApp> {
     var prefs = await SharedPreferences.getInstance();
 
     String languageCode = prefs.getString('languageCode') ?? 'en';
-    print(languageCode);
+    if (kDebugMode) {
+      print(languageCode);
+    }
     return Locale(languageCode);
   }
 
@@ -58,22 +62,28 @@ class _MainAppState extends State<MainApp> {
     if (kDebugMode) {
       print(_locale.countryCode);
     }
-    return MaterialApp(
-      locale: _locale,
-      debugShowCheckedModeBanner: false,
-      supportedLocales: L10n.all,
-      localizationsDelegates: const [
-        AppLocalizations.delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-        FallbackCupertinoLocalisationsDelegate(),
-      ],
-      home: const SelectLanguageDropdown(),
-      theme: ThemeData(
-        primarySwatch: Colors.deepPurple,
-      ),
-    );
+    return AdaptiveTheme(
+        light: ThemeData(brightness: Brightness.light),
+        dark: ThemeData(brightness: Brightness.dark),
+        initial: AdaptiveThemeMode.light,
+        builder: (theme, darkTheme) {
+          return MaterialApp(
+            locale: _locale,
+            debugShowCheckedModeBanner: false,
+            supportedLocales: L10n.all,
+            localizationsDelegates: const [
+              AppLocalizations.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+              FallbackCupertinoLocalisationsDelegate(),
+            ],
+            theme: theme,
+            darkTheme: darkTheme,
+            scaffoldMessengerKey: messengerKey,
+            home: const SelectLanguageDropdown(),
+          );
+        });
   }
 }
 

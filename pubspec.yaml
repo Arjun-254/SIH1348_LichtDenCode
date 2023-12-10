@@ -45,6 +45,13 @@ dependencies:
   lottie: ^2.6.0
   google_maps_flutter:
   geolocator:
+  email_validator:
+  image_picker:
+  file_picker:
+  settings_ui:
+  adaptive_theme:
+  flutter_onboarding_slider:
+  font_awesome_flutter:
 
 
   # The following adds the Cupertino Icons font to your application.
