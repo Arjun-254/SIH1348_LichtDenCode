@@ -58,11 +58,7 @@ class _Login extends State<Login> {
               gradient: LinearGradient(
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
-                  colors: [
-                    Colors.grey[900]!,
-                    Colors.black,
-                    Colors.grey[900]!,
-                  ]),
+                  colors: [Colors.white, Colors.blue[200]!, Colors.cyan[300]!]),
             ),
             child: Scaffold(
               backgroundColor: Colors.transparent,
@@ -80,7 +76,7 @@ class _Login extends State<Login> {
                       child: Container(
                         padding: const EdgeInsets.only(top: 80.0),
                         child: Text(
-                          "Correctify",
+                          AppLocalizations.of(context)!.railwayBuddy,
                           style: TextStyle(
                               color: Colors.cyan[500],
                               fontSize: 50.0,
@@ -199,7 +195,7 @@ class _Login extends State<Login> {
                                   style: ButtonStyle(
                                       backgroundColor:
                                           MaterialStateProperty.all(
-                                            Colors.cyan[500],
+                                        Colors.cyan[500],
                                       ),
                                       shape: MaterialStateProperty.all<
                                               RoundedRectangleBorder>(
@@ -313,7 +309,7 @@ class _Login extends State<Login> {
         'img', imagePath!.readAsBytes().asStream(), imagePath.lengthSync(),
         filename: basename(imagePath.path),
         contentType: MediaType('application', 'octet-stream')));
-    response.fields['email'] = email!;
+    response.fields['username'] = email!;
     response.fields['password'] = password!;
     var res = await response.send();
     var responseBody = await res.stream.bytesToString();
@@ -331,7 +327,8 @@ class _Login extends State<Login> {
       stuff.message,
       stuff.accessToken,
       stuff.tokenType,
-      res.statusCode
+      res.statusCode,
+      stuff.name
     ];
     debugPrint(list[1].toString());
     return list;

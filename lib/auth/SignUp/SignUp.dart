@@ -113,77 +113,6 @@ class _SignUpState extends State<SignUp> {
                               padding: const EdgeInsets.only(
                                   left: 35.0, right: 35.0),
                               child: Column(children: [
-                                Row(
-                                  children: [
-                                    Expanded(
-                                      child: TextFormField(
-                                        keyboardType: TextInputType.name,
-                                        decoration: InputDecoration(
-                                            contentPadding:
-                                                const EdgeInsets.all(13),
-                                            fillColor: Colors.white,
-                                            filled: true,
-                                            hintText:
-                                                AppLocalizations.of(context)!
-                                                    .firstName,
-                                            hintStyle: const TextStyle(
-                                                fontFamily: "productSansReg",
-                                                fontWeight: FontWeight.w500,
-                                                color: Colors.black),
-                                            errorStyle: const TextStyle(
-                                                fontFamily: "productSansReg",
-                                                color: Colors.red,
-                                                fontWeight: FontWeight.w500),
-                                            border: OutlineInputBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(7.0),
-                                                borderSide: BorderSide.none)),
-                                        controller: firstNameController,
-                                        validator: (name) {
-                                          if (name == null) {
-                                            return 'Enter your first name';
-                                          }
-                                          return null;
-                                        },
-                                        onSaved: (value) {},
-                                      ),
-                                    ),
-                                    const Padding(padding: EdgeInsets.all(5.0)),
-                                    Expanded(
-                                      child: TextFormField(
-                                        keyboardType: TextInputType.name,
-                                        decoration: InputDecoration(
-                                            contentPadding:
-                                                const EdgeInsets.all(13),
-                                            fillColor: Colors.white,
-                                            filled: true,
-                                            hintText:
-                                                AppLocalizations.of(context)!
-                                                    .lastName,
-                                            hintStyle: const TextStyle(
-                                                fontFamily: "productSansReg",
-                                                fontWeight: FontWeight.w500,
-                                                color: Colors.black),
-                                            errorStyle: const TextStyle(
-                                                fontFamily: "productSansReg",
-                                                color: Colors.red,
-                                                fontWeight: FontWeight.w500),
-                                            border: OutlineInputBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(7.0),
-                                                borderSide: BorderSide.none)),
-                                        controller: lastNameController,
-                                        validator: (name) {
-                                          if (name == null) {
-                                            return 'Enter your last name';
-                                          }
-                                          return null;
-                                        },
-                                        onSaved: (value) {},
-                                      ),
-                                    ),
-                                  ],
-                                ),
                                 const Padding(padding: EdgeInsets.all(10.0)),
                                 TextFormField(
                                   keyboardType: TextInputType.emailAddress,
@@ -337,8 +266,6 @@ class _SignUpState extends State<SignUp> {
                                             var lst = await SignUp(
                                                 emailController.text.trim(),
                                                 passwordController.text.trim(),
-                                                firstNameController.text.trim(),
-                                                lastNameController.text.trim(),
                                                 path);
                                             Utils.showSnackBar1(lst[0]);
                                             Navigator.of(context).pop();
@@ -363,21 +290,20 @@ class _SignUpState extends State<SignUp> {
         ));
   }
 
-  Future SignUp(String? email, String? password, String? firstname,
-      String? lastname, File? imagePath) async {
-    print(imagePath!.path);
-    print(url);
+  Future SignUp(String? email, String? password, File? imagePath) async {
+    if (kDebugMode) {
+      print(imagePath!.path);
+      print(url);
+    }
     var response = http.MultipartRequest(
       'POST',
       Uri.parse('$url/signup/'),
     );
     response.files.add(http.MultipartFile(
-        'img', imagePath.readAsBytes().asStream(), imagePath.lengthSync(),
+        'img', imagePath!.readAsBytes().asStream(), imagePath.lengthSync(),
         filename: basename(imagePath.path),
         contentType: MediaType('multipart', 'form-data')));
-    response.fields['first_name'] = firstname!;
-    response.fields['last_name'] = lastname!;
-    response.fields['email'] = email!;
+    response.fields['username'] = email!;
     response.fields['password'] = password!;
     var res = await response.send();
     var responseBody = await res.stream.bytesToString();

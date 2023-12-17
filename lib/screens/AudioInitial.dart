@@ -18,14 +18,14 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 var lst = [];
 String ngrokurl = "https://3f61-34-124-150-43.ngrok-free.app";
   
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+class AudioInitial extends StatefulWidget {
+  const AudioInitial({super.key});
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<AudioInitial> createState() => _AudioInitialState();
 }
 
-class _HomePageState extends State<HomePage>
+class _AudioInitialState extends State<AudioInitial>
     with SingleTickerProviderStateMixin {
   int maxDuration = 10;
   double deviceHeight = Constants().deviceHeight,

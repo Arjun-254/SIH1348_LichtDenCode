@@ -85,6 +85,7 @@ flutter:
   assets:
      - assets/
      - assets/model/
+     - assets/images/
 
   fonts:
     - family: googlesansmed
