@@ -43,7 +43,7 @@ const Mic = () => {
   const [ner, setNer] = useState([]);
 
   const mimeType = "audio/webm";
-  const ngrokurl = "https://dccc-34-82-153-245.ngrok-free.app";
+  const ngrokurl = "https://f0f4-34-125-149-216.ngrok-free.app";
   //in built api reference
   const mediaRecorder = useRef(null);
 
@@ -126,13 +126,10 @@ const Mic = () => {
       formData.append("file", audioBlob, "audio.webm");
 
       try {
-        const response = await fetch(
-          ngrokurl+"/transcribe/",
-          {
-            method: "POST",
-            body: formData,
-          }
-        );
+        const response = await fetch(ngrokurl + "/transcribe/", {
+          method: "POST",
+          body: formData,
+        });
 
         if (response.ok) {
           const data = await response.json();
@@ -153,19 +150,16 @@ const Mic = () => {
     console.log("outside falcon");
     setclickspeak(true);
     try {
-      const response = await fetch(
-        ngrokurl+"/coqui-tts/",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json", // Specify JSON content type
-          },
-          body: JSON.stringify({
-            text: falcon,
-            emotion: "cheerful",
-          }),
-        }
-      );
+      const response = await fetch(ngrokurl + "/coqui-tts/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json", // Specify JSON content type
+        },
+        body: JSON.stringify({
+          text: falcon,
+          emotion: "cheerful",
+        }),
+      });
 
       if (response.ok) {
         const responseData = await response.blob(); // Get the binary response data
@@ -184,19 +178,16 @@ const Mic = () => {
   // Get Location via NER API CALL
   const handleNER = async () => {
     try {
-      const response = await fetch(
-        ngrokurl+"/ner/",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json", // Specify JSON content type
-          },
-          body: JSON.stringify({
-            text: transcription,
-            emotion: "Anger",
-          }),
-        }
-      );
+      const response = await fetch(ngrokurl + "/ner/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json", // Specify JSON content type
+        },
+        body: JSON.stringify({
+          text: transcription,
+          emotion: "Anger",
+        }),
+      });
 
       if (response.ok) {
         const nerData = await response.json();
@@ -223,19 +214,16 @@ const Mic = () => {
 
   const falconResponse = async () => {
     try {
-      const response = await fetch(
-        ngrokurl+"/chat/",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json", // Specify JSON content type
-          },
-          body: JSON.stringify({
-            text: transcription,
-            emotion: "Neutral",
-          }),
-        }
-      );
+      const response = await fetch(ngrokurl + "/chat/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json", // Specify JSON content type
+        },
+        body: JSON.stringify({
+          text: transcription,
+          emotion: "Neutral",
+        }),
+      });
 
       if (response.ok) {
         const falcon_response = await response.json();

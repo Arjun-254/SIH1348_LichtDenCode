@@ -1,10 +1,19 @@
-import React from "react";
+import React, { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 export default function Navbar() {
   const navigate = useNavigate();
+  const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem("flag"));
+  const ref = useRef(null);
+  const handleLogout = () => {
+    setIsLoggedIn(false);
+    localStorage.setItem("flag", "");
+    localStorage.setItem("access_token", "");
+    navigate("/");
+  };
+
   return (
-    <div className="flex flex-row static ">
+    <div className="flex flex-row static no-scrollbar overflow-y-auto">
       <header className="absolute inset-x-0 top-0 z-50 bg-gradient-to-r from-blue-600 to-blue-800">
         <nav
           className="flex items-center justify-between p-2 mb-1 lg:px-8 "
@@ -52,37 +61,61 @@ export default function Navbar() {
             <a
               className="text-md font-semibold leading-6 text-gray-200 hover:font-extrabold hover:shadow-xl transition-all ease-in duration-100 p-2 rounded-lg"
               onClick={() => {
-                navigate("/Dashboard");
+                navigate("/doc");
               }}
             >
-              FAQs
+              Document Checker
             </a>
-
-            <a
-              className="text-md font-semibold leading-6 text-gray-200 hover:font-extrabold hover:shadow-xl transition-all ease-in duration-100 p-2 rounded-lg"
-              onClick={() => {}}
-            >
-              About Us
-            </a>
+            {isLoggedIn ? (
+              <a
+                className="text-md font-semibold leading-6 text-gray-200 hover:font-extrabold hover:shadow-xl transition-all ease-in duration-100 p-2 rounded-lg"
+                onClick={() => {
+                  navigate("/Assistant");
+                }}
+              >
+                {localStorage.getItem("name")}'s Chat
+              </a>
+            ) : (
+              <a
+                className="text-md font-semibold leading-6 text-gray-200 hover:font-extrabold hover:shadow-xl transition-all ease-in duration-100 p-2 rounded-lg"
+                onClick={() => {
+                  navigate("/");
+                }}
+              >
+                About Us
+              </a>
+            )}
           </div>
-          <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-            <a
-              className="text-sm font-semibold leading-6 text-gray-200 mr-2 p-2 hover:bg-blue-500 rounded-md transition-all duration-500 ease-in-out border-2 border-blue-500"
-              onClick={() => {
-                navigate("/Signup");
-              }}
-            >
-              Sign Up <span aria-hidden="true"></span>
-            </a>
-            <a
-              className="text-sm font-semibold leading-6 text-gray-200 p-2 hover:bg-blue-500 rounded-md transition-all duration-500 ease-in-out border-2  border-blue-500"
-              onClick={() => {
-                navigate("/Login");
-              }}
-            >
-              Log in <span aria-hidden="true">&rarr;</span>
-            </a>
-          </div>
+          {!isLoggedIn && (
+            <div className="hidden lg:flex lg:flex-1 lg:justify-end">
+              <a
+                className="text-sm font-semibold leading-6 text-gray-100 mr-2 p-2 hover:bg-blue-500 bg-blue-600  border-white rounded-md transition-all duration-500 ease-in-out border-2 "
+                onClick={() => {
+                  navigate("/Signup");
+                }}
+              >
+                Sign Up <span aria-hidden="true"></span>
+              </a>
+              <a
+                className="text-sm font-semibold leading-6 text-gray-100 p-2 hover:bg-blue-500 bg-blue-600   border-white rounded-md transition-all duration-500 ease-in-out border-2 "
+                onClick={() => {
+                  navigate("/Login");
+                }}
+              >
+                Log in <span aria-hidden="true">&rarr;</span>
+              </a>
+            </div>
+          )}
+          {isLoggedIn && (
+            <div className="hidden lg:flex lg:flex-1 lg:justify-end">
+              <a
+                className="text-sm font-semibold leading-6 text-gray-100 mr-2 p-2 hover:bg-blue-500 bg-blue-600  border-white rounded-md transition-all duration-500 ease-in-out border-2 "
+                onClick={handleLogout}
+              >
+                Log Out <span aria-hidden="true"></span>
+              </a>
+            </div>
+          )}
         </nav>
       </header>
     </div>

@@ -8,7 +8,10 @@ import {
 } from "react-router-dom";
 import { BrowserRouter } from "react-router-dom";
 import { Assistant } from "./pages/Assistant";
-import  Map  from "./components/Map";
+import Map from "./components/Map";
+import { Test } from "./pages/Test";
+import Login from "./pages/Login";
+import Signup from "./pages/Signup";
 
 function App() {
   return (
@@ -16,8 +19,9 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Landing />} />
-          <Route path="/Assistant" element={<Assistant />} />
-          <Route path="/Map" element={<Map />} />
+          <Route path="/Assistant" element={<Test />} />
+          <Route path="/Login" element={<Login />} />
+          <Route path="/Signup" element={<Signup />} />
         </Routes>
       </BrowserRouter>
     </div>
