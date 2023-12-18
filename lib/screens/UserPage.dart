@@ -6,6 +6,7 @@ import 'bottomBar/AudioInput.dart';
 import 'bottomBar/Chat/TextInput.dart';
 import 'bottomBar/OCRInput.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:alan_voice/alan_voice.dart';
 
 class UserPage extends StatefulWidget {
   const UserPage({Key? key, required this.token}) : super(key: key);
@@ -28,6 +29,9 @@ class _UserPageState extends State<UserPage> {
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
+    AlanVoice.addButton(
+        "5ff81ea079e4b969330f4bf6e0645d582e956eca572e1d8b807a3e2338fdd0dc/stage",
+        buttonAlign: AlanVoice.BUTTON_ALIGN_RIGHT);
 
     return SafeArea(
       child: Scaffold(

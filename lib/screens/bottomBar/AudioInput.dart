@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sih/maps/maps.dart';
 import '../../models/AudioModel.dart';
 import '../../helpers/Utils.dart';
 import '../../constants.dart';
@@ -121,9 +122,6 @@ class _AudioInputState extends State<AudioInput>
             physics: const AlwaysScrollableScrollPhysics(),
             child: Column(
               children: [
-                SizedBox(
-                  height: 50 * (height / deviceHeight),
-                ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Text(
@@ -136,7 +134,7 @@ class _AudioInputState extends State<AudioInput>
                   ),
                 ),
                 SizedBox(
-                  height: 100 * (height / deviceHeight),
+                  height: 80 * (height / deviceHeight),
                 ),
                 StreamBuilder<RecordingDisposition>(
                     stream: recorder.onProgress,
@@ -160,7 +158,7 @@ class _AudioInputState extends State<AudioInput>
                       );
                     }),
                 SizedBox(
-                  height: 80 * (height / deviceHeight),
+                  height: 40 * (height / deviceHeight),
                 ),
                 if (isPlaying)
                   Center(
@@ -170,17 +168,27 @@ class _AudioInputState extends State<AudioInput>
                   )),
                 if (!isPlaying)
                   SizedBox(
-                    height: 150 * (height / deviceHeight),
+                    height: 160 * (height / deviceHeight),
                     child: gotSomeTextYo
-                        ? Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              lst[0],
-                              style: const TextStyle(
-                                  fontSize: 15.0,
-                                  fontWeight: FontWeight.w700,
-                                  fontFamily: "productSansReg",
-                                  color: Color(0xFF009CFF)),
+                        ? Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                  width: 1.5, color: const Color(0xFF009CFF)
+                              ),
+                              borderRadius: const BorderRadius.all(Radius.circular(20)),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: SingleChildScrollView(
+                                child: Text(
+                                  lst[0],
+                                  style: const TextStyle(
+                                      fontSize: 15.0,
+                                      fontWeight: FontWeight.w700,
+                                      fontFamily: "productSansReg",
+                                      color: Color(0xFF009CFF)),
+                                ),
+                              ),
                             ),
                           )
                         : const Padding(
@@ -237,6 +245,38 @@ class _AudioInputState extends State<AudioInput>
                 SizedBox(
                   height: 70 * (height / deviceHeight),
                 ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => const maps()));
+                    },
+                    style: ElevatedButton.styleFrom(
+                        padding: EdgeInsets.zero,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(60))),
+                    child: Ink(
+                      decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                              colors: [Colors.blue[700]!, Colors.blue[500]!]),
+                          borderRadius: BorderRadius.circular(25)),
+                      child: Container(
+                        width: 165 * (height / deviceHeight),
+                        height: 60 * (height / deviceHeight),
+                        alignment: Alignment.center,
+                        child: Text(
+                          AppLocalizations.of(context)!.chooseMap,
+                          style: const TextStyle(
+                              fontFamily: "productSansReg",
+                              color: Colors.white,
+                              fontWeight: FontWeight.w700,
+                              fontSize: 18),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
@@ -250,8 +290,8 @@ class _AudioInputState extends State<AudioInput>
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var token = prefs.getString('token');
     var header = {'token': '$token'};
-    print(token);
     if (kDebugMode) {
+      print(token);
       print(audioPath!.path);
     }
     var response = http.MultipartRequest(
@@ -292,14 +332,14 @@ class _AudioInputState extends State<AudioInput>
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var token = prefs.getString('token');
     var res = await http.post(
-      Uri.parse('$ngrokurl/rewriter/'),
+      Uri.parse('$ngrokurl/chat/'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'token': '$token'
       },
       body: jsonEncode(<String, String>{
         "text":
-            "Fix it such that grammatical and spelling errors are corrected: $text",
+            "Fix it and answer such that grammatical and spelling errors are corrected: $text",
         "emotion": "Professional & Cheerful"
       }),
     );

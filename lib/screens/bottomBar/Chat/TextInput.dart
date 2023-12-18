@@ -107,14 +107,14 @@ class _TextInputState extends State<TextInput> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var token = prefs.getString('token');
     var res = await http.post(
-      Uri.parse('$ngrokurl/rewriter/'),
+      Uri.parse('$ngrokurl/chat/'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'token': '$token'
       },
       body: jsonEncode(<String, String>{
         "text":
-            "Fix it such that grammatical and spelling errors are corrected: $text",
+            "Fix it and answer such that grammatical and spelling errors are corrected: $text",
         "emotion": "Professional & Cheerful"
       }),
     );
