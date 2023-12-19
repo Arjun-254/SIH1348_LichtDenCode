@@ -107,7 +107,7 @@ const TranslateMessage = ({ type, lang, content }) => {
       setLoading(true); // Set loading to true when the request starts
 
       const response = await fetch(
-        "https://ee48-34-125-144-173.ngrok-free.app" + "/translate", //translate different
+        "https://32ec-34-125-19-12.ngrok-free.app" + "/translate", //translate different
         {
           method: "POST",
           headers: {
