@@ -15,7 +15,7 @@ export default function Statement() {
                 Your personal travel companion
               </h2>
               <p className="md:text-9xl font-bold flex justify-center items-center tracking-tight bg-gradient-to-r from-blue-400 to-blue-700 bg-clip-text text-transparent text-9xl">
-                Railway Buddy
+                Railway Mitra
               </p>
               <dl className="mt-4 max-w-9xl space-y-8 text-base leading-7 text-slate-200 lg:max-w-none">
                 <p className="md:text-xl font-bold flex  tracking-tight bg-gradient-to-r from-gray-500 to-gray-900 bg-clip-text text-transparent text-xl">

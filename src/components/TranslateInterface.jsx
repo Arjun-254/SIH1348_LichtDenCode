@@ -1,9 +1,13 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Bars, CirclesWithBar, Audio, Puff } from "react-loader-spinner";
 import { FaMicrophone } from "react-icons/fa";
-import ChatMessage from "./ChatMessage";
+import TranslateMessage from "./TranslateMessage";
+import Select from "react-select";
+import makeAnimated from "react-select/animated";
 
-export const UserInterface = () => {
+const animatedComponents = makeAnimated();
+
+export const TranslateInterface = () => {
   const [transcription, setTranscription] = useState("");
   //For text field instead of voice
   const [textInput, setTextInput] = useState("");
@@ -204,6 +208,65 @@ export const UserInterface = () => {
     }
   }, [messages]);
 
+  const langList = [
+    { value: "ar_AR", label: "Arabic" },
+    { value: "cs_CZ", label: "Czech" },
+    { value: "de_DE", label: "German" },
+    { value: "en_XX", label: "English" },
+    { value: "es_XX", label: "Spanish" },
+    { value: "et_EE", label: "Estonian" },
+    { value: "fi_FI", label: "Finnish" },
+    { value: "fr_XX", label: "French" },
+    { value: "gu_IN", label: "Gujarati" },
+    { value: "hi_IN", label: "Hindi" },
+    { value: "it_IT", label: "Italian" },
+    { value: "ja_XX", label: "Japanese" },
+    { value: "kk_KZ", label: "Kazakh" },
+    { value: "ko_KR", label: "Korean" },
+    { value: "lt_LT", label: "Lithuanian" },
+    { value: "lv_LV", label: "Latvian" },
+    { value: "my_MM", label: "Burmese" },
+    { value: "ne_NP", label: "Nepali" },
+    { value: "nl_XX", label: "Dutch" },
+    { value: "ro_RO", label: "Romanian" },
+    { value: "ru_RU", label: "Russian" },
+    { value: "si_LK", label: "Sinhala" },
+    { value: "tr_TR", label: "Turkish" },
+    { value: "vi_VN", label: "Vietnamese" },
+    { value: "zh_CN", label: "Chinese" },
+    { value: "af_ZA", label: "Afrikaans" },
+    { value: "az_AZ", label: "Azerbaijani" },
+    { value: "bn_IN", label: "Bengali" },
+    { value: "fa_IR", label: "Persian" },
+    { value: "he_IL", label: "Hebrew" },
+    { value: "hr_HR", label: "Croatian" },
+    { value: "id_ID", label: "Indonesian" },
+    { value: "ka_GE", label: "Georgian" },
+    { value: "km_KH", label: "Khmer" },
+    { value: "mk_MK", label: "Macedonian" },
+    { value: "ml_IN", label: "Malayalam" },
+    { value: "mn_MN", label: "Mongolian" },
+    { value: "mr_IN", label: "Marathi" },
+    { value: "pl_PL", label: "Polish" },
+    { value: "ps_AF", label: "Pashto" },
+    { value: "pt_XX", label: "Portuguese" },
+    { value: "sv_SE", label: "Swedish" },
+    { value: "sw_KE", label: "Swahili" },
+    { value: "ta_IN", label: "Tamil" },
+    { value: "te_IN", label: "Telugu" },
+    { value: "th_TH", label: "Thai" },
+    { value: "tl_XX", label: "Tagalog" },
+    { value: "uk_UA", label: "Ukrainian" },
+    { value: "ur_PK", label: "Urdu" },
+    { value: "xh_ZA", label: "Xhosa" },
+    { value: "gl_ES", label: "Galician" },
+    { value: "sl_SI", label: "Slovene" },
+  ];
+  const [lang, setLang] = useState(null);
+  const handleChoose = (selectedOptions) => {
+    setLang(selectedOptions.value);
+  };
+
   return (
     <div className="flex flex-col bg-gradient-to-b bg-cover bg-center from-white via-blue-100 to-cyan-300 h-screen max-h-screen mt-6 pt-10 no-scrollbar overflow-y-auto ">
       <div
@@ -212,10 +275,11 @@ export const UserInterface = () => {
         ref={chatContainerRef}
       >
         {messages.map((message, index) => (
-          <ChatMessage
+          <TranslateMessage
             key={index}
             type={message.type}
             content={message.content}
+            lang={lang}
           />
         ))}
       </div>
@@ -273,7 +337,7 @@ export const UserInterface = () => {
             </div>
           ) : null}
           <div className="flex flex-col">
-            <div className="flex flex-row justify-center items-center">
+            <div className="flex flex-row justify-center items-center mt-2">
               <input
                 type="text"
                 value={textInput}
@@ -283,7 +347,7 @@ export const UserInterface = () => {
               />
             </div>
 
-            <div className="flex flex-row justify-center items-center mt-2">
+            <div className="flex flex-row justify-center items-center">
               {suggestions.slice(-5).map((suggestion, index) => (
                 <button
                   key={index}
@@ -311,6 +375,15 @@ export const UserInterface = () => {
                 ariaLabel="circles-with-bar-loading"
               />
             )}
+            <div className=" w-80">
+              <Select
+                options={langList}
+                closeMenuOnSelect={false}
+                components={animatedComponents}
+                onChange={handleChoose}
+                menuPlacement="top"
+              />
+            </div>
             <button
               onClick={handleTranscribe}
               className=" hover:animate-pulse bg-gradient-to-r from-pink-300 via-violet-300 to-purple-400 text-white font-bold shadow-md py-2 px-6 ml-2 rounded-full focus:outline-none focus:shadow-outline"

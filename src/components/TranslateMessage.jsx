@@ -1,9 +1,8 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Bars, CirclesWithBar, Audio, Puff, Dna } from "react-loader-spinner";
 import { FaMicrophone } from "react-icons/fa";
-import ReactMarkdown from "react-markdown";
 
-const ChatMessage = ({ type, content }) => {
+const TranslateMessage = ({ type, lang, content }) => {
   // State variables
   //console.log(localStorage.getItem("access_token"));
   const [transcription, setTranscription] = useState("");
@@ -28,28 +27,25 @@ const ChatMessage = ({ type, content }) => {
   const [correctedText, setCorrectedText] = useState("");
 
   const mimeType = "audio/webm";
-  const ngrokurl = "https://38e8-34-71-168-160.ngrok-free.app";
+  const ngrokurl = "https://38e8-34-71-168-160.ngrok-free.app"; //everything
   //in built api reference
   const mediaRecorder = useRef(null);
 
   const handleSound = async () => {
     setclickspeak(true);
     try {
-      const response = await fetch(
-        "https://ee48-34-125-144-173.ngrok-free.app" + "/coqui-tts",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            token: localStorage.getItem("access_token"),
-            // Specify JSON content type
-          },
-          body: JSON.stringify({
-            text: falcon,
-            emotion: "cheerful",
-          }),
-        }
-      );
+      const response = await fetch(ngrokurl + "/tamil-tts", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          token: localStorage.getItem("access_token"),
+          // Specify JSON content type
+        },
+        body: JSON.stringify({
+          text: falcon,
+          emotion: "cheerful",
+        }),
+      });
 
       if (response.ok) {
         const responseData = await response.blob(); // Get the binary response data
@@ -75,7 +71,7 @@ const ChatMessage = ({ type, content }) => {
           token: localStorage.getItem("access_token"),
         },
         body: JSON.stringify({
-          text: content,
+          text: transcription,
           emotion: "Anger",
         }),
       });
@@ -83,11 +79,11 @@ const ChatMessage = ({ type, content }) => {
       if (response.ok) {
         const nerData = await response.json();
         setNer(nerData.LOC);
-        console.log(content);
-        console.log(nerData.LOC);
-        const url = `https://www.google.com/maps/dir/${nerData.LOC[0]}+station/${nerData.LOC[1]}+station`;
+        console.log(transcription);
+        console.log(ner);
+        const url = `https://www.google.com/maps/dir/${ner[0]}+station/${ner[1]}+station`;
         //to only open new window when double clicked
-        if (true) {
+        if (count == 1) {
           window.open(url, "_blank", "noreferrer");
           setCount(0);
         } else {
@@ -106,24 +102,30 @@ const ChatMessage = ({ type, content }) => {
   const [loading, setLoading] = useState(false); // New loading state
 
   const falconResponse = async () => {
+    //To translate to tamil rn
     try {
       setLoading(true); // Set loading to true when the request starts
 
-      const response = await fetch(ngrokurl + "/gemini/", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          token: localStorage.getItem("access_token"),
-        },
-        body: JSON.stringify({
-          text: content,
-          emotion: "Neutral",
-        }),
-      });
+      const response = await fetch(
+        "https://ee48-34-125-144-173.ngrok-free.app" + "/translate", //translate different
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            token: localStorage.getItem("access_token"),
+          },
+          body: JSON.stringify({
+            text: content,
+            src_lang: "en_XX",
+            tgt_lang: "ta_IN",
+            emotion: "Neutral",
+          }),
+        }
+      );
 
       if (response.ok) {
         const falcon_response = await response.json();
-        setFalcon(falcon_response.text);
+        setFalcon(falcon_response.translated_text);
         console.log(falcon_response);
       } else {
         console.log("model dead");
@@ -139,6 +141,7 @@ const ChatMessage = ({ type, content }) => {
     // Check if content is available and falcon is not set
     if (content && !falcon) {
       falconResponse();
+      console.log(lang);
     }
   }, [content, falcon]);
 
@@ -149,12 +152,6 @@ const ChatMessage = ({ type, content }) => {
           type === "user" ? "justify-end" : "justify-start"
         } items-center ml-auto`}
       >
-        <button
-          onClick={handleNER}
-          className="bg-gradient-to-r from-pink-300 via-violet-300 to-purple-400 hover:bg-blue-700 text-white font-bold py-2 px-6 mx-2 rounded-full shadow-md focus:outline-none focus:shadow-outline flex items-center"
-        >
-          Route <span className="mlc-2">&#10132;</span>
-        </button>
         <div
           className={`flex flex-col ${
             type != "user" ? "items-end" : "items-start"
@@ -165,7 +162,7 @@ const ChatMessage = ({ type, content }) => {
           <h2 className="text-lg font-semibold">
             {type === "user" ? " You " : " Railway Buddy 🚞 "}
           </h2>
-          <ReactMarkdown>{content}</ReactMarkdown>
+          <p className="mt-2 text-sm">{content}</p>
         </div>
         <div className="mx-1 p-5 rounded-full border-blue-200 border-4"></div>
       </div>
@@ -173,7 +170,7 @@ const ChatMessage = ({ type, content }) => {
       <div className="flex flex-row justify-start items-center mr-auto pt-2 ml-1">
         <div className="mx-1 p-5 rounded-full border-gray-300 border-4"></div>
         <div className="flex flex-col justify-start items-start w-7/12 bg-gray-300 rounded-lg p-3">
-          <h2 className="text-lg font-semibold">Railway Mitra Chat🤖</h2>
+          <h2 className="text-lg font-semibold">Railway Mitra Translation🤖</h2>
           {loading ? (
             <Dna
               visible={true}
@@ -242,4 +239,4 @@ const ChatMessage = ({ type, content }) => {
   );
 };
 
-export default ChatMessage;
+export default TranslateMessage;

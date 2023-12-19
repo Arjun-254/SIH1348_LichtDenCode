@@ -7,11 +7,11 @@ import {
   useLocation,
 } from "react-router-dom";
 import { BrowserRouter } from "react-router-dom";
-import { Assistant } from "./pages/Assistant";
-import Map from "./components/Map";
 import { Test } from "./pages/Test";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
+import TrainDash from "./pages/TrainDash";
+import { Translate } from "./pages/Translate";
 
 function App() {
   return (
@@ -22,6 +22,8 @@ function App() {
           <Route path="/Assistant" element={<Test />} />
           <Route path="/Login" element={<Login />} />
           <Route path="/Signup" element={<Signup />} />
+          <Route path="/Dashboard" element={<TrainDash />} />
+          <Route path="/Translate" element={<Translate />} />
         </Routes>
       </BrowserRouter>
     </div>

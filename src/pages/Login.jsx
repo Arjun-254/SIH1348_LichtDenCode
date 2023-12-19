@@ -39,7 +39,7 @@ const Login = () => {
     formData.append("password", password);
     formData.append("img", file);
     const res = await axios.post(
-      "https://1d0a-34-125-115-31.ngrok-free.app/login/",
+      "https://38e8-34-71-168-160.ngrok-free.app/login/",
       formData,
       {
         headers: {
@@ -70,16 +70,16 @@ const Login = () => {
   }
 
   return (
-    <div className="p-10 bg-gray-950 no-scrollbar">
+    <div className="p-10 bg-gradient-to-b bg-cover bg-center from-white via-blue-100 to-cyan-300 no-scrollbar">
       <div className="flex flex-col items-center mx-auto justify-center h-screen bg-gradient-to-b bg-cover bg-center from-white via-blue-100 to-cyan-300 text-black overflow-y-auto no-scrollbar">
         <Navbar />
         <div className="absolute no-scrollbar ">
-          <div className="text-3xl font-bold mb-4 mt-6 text-white flex justify-center items-center">
+          <div className="text-3xl font-bold mb-4 mt-6 text-black flex justify-center items-center">
             <Typewriter words={["Login"]} cursor cursorStyle="_" loop={0} />
           </div>
           <form onSubmit={handleSubmit} className="w-96 no-scrollbar">
             <div className="mb-4">
-              <label htmlFor="email" className="flex mb-2 font-bold text-white">
+              <label htmlFor="email" className="flex mb-2 font-bold text-black">
                 Email:
               </label>
               <input
@@ -94,7 +94,7 @@ const Login = () => {
             <div className="mb-4">
               <label
                 htmlFor="password"
-                className="flex  mb-2 font-bold text-white"
+                className="flex  mb-2 font-bold text-black"
               >
                 Password:
               </label>
@@ -110,7 +110,7 @@ const Login = () => {
             {/* <Home/> */}
             <div className="home-container flex items-center mx-auto col-md-6">
               <div className="container flex items-center justify-center ">
-                <div className="text-white items-center flex flex-col justify-center">
+                <div className="text-black items-center flex flex-col justify-center">
                   <h1 className="mb-3 text-lg">
                     Please take an image of your face
                   </h1>
@@ -180,7 +180,7 @@ const Login = () => {
             </div>
           </form>
           <div className="flex justify-center items-center">
-            <p className="mt-4 text-white">
+            <p className=" text-white">
               Don't have an account?{" "}
               <Link to="/register" className="text-blue-500">
                 SignUp
