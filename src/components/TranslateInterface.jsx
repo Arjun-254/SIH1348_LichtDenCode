@@ -4,13 +4,16 @@ import { FaMicrophone } from "react-icons/fa";
 import TranslateMessage from "./TranslateMessage";
 import Select from "react-select";
 import makeAnimated from "react-select/animated";
+import { useLocation } from "react-router-dom";
 
 const animatedComponents = makeAnimated();
 
 export const TranslateInterface = () => {
+  const location = useLocation();
+  const announcementString = location.state?.announcement || "";
+  const [textInput, setTextInput] = useState(announcementString); // Set textInput with the announcement string
   const [transcription, setTranscription] = useState("");
   //For text field instead of voice
-  const [textInput, setTextInput] = useState("");
 
   //mic permission
   const [permission, setPermission] = useState(false);

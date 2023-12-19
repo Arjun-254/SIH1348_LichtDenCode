@@ -127,6 +127,7 @@ const TranslateMessage = ({ type, lang, content }) => {
         const falcon_response = await response.json();
         setFalcon(falcon_response.translated_text);
         console.log(falcon_response);
+        handleSound();
       } else {
         console.log("model dead");
       }

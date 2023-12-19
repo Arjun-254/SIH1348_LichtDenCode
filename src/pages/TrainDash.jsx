@@ -1,17 +1,33 @@
 import React, { useState, useEffect } from "react";
 import Navbar from "../components/Navbar";
 import { Typewriter } from "react-simple-typewriter";
-import News from "../components/News";
 import { useNavigate } from "react-router-dom";
-import Datepicker from "react-tailwindcss-datepicker";
-import Train from "./Train";
-import { FaCode } from "react-icons/fa";
 import SelectTrain from "../components/SelectTrain";
+import Datepicker from "react-tailwindcss-datepicker";
 
 export default function TrainDash() {
   const navigate = useNavigate();
   const [source, setSource] = useState("");
   const [destination, setDestination] = useState("");
+
+  const train_data1 = {
+    train_name: ["Express Train 1", "Express Train 2" /* ... */],
+    train_no: ["123", "456" /* ... */],
+  };
+
+  const train_data2 = {
+    Dep: ["10:00 AM", "11:30 AM" /* ... */],
+    PFfrom: ["Platform 1", "Platform 2" /* ... */],
+  };
+
+  // Combine the data into an array of objects
+  const trainData = train_data1["train_name"].map((_, index) => ({
+    trainNumber: train_data1["train_no"][index],
+    trainName: train_data1["train_name"][index],
+    platformNumber: train_data2["PFfrom"][index],
+    trainTime: train_data2["Dep"][index],
+  }));
+  console.log(trainData);
   const [value, setValue] = useState({
     startDate: null,
     endDate: null,
@@ -31,6 +47,77 @@ export default function TrainDash() {
   const handleSelectDestination = (value) => {
     setDestination(value);
     console.log(value);
+  };
+
+  // Function to handle the announcement
+  const handleIVRS = async (train) => {
+    try {
+      const response = await fetch("endpoint/make_call", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          // Add any additional headers as needed
+        },
+        body: JSON.stringify({
+          train_name: train.trainName,
+          train_no: train.trainNumber,
+          platform_number: train.platformNumber,
+          departure_time: train.trainTime,
+        }),
+      });
+
+      if (response.ok) {
+        // Handle success, e.g., show a success message
+        console.log("Announcement successful");
+      } else {
+        // Handle error, e.g., show an error message
+        console.error("Announcement failed");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+
+  const handleSMS = async (train) => {
+    try {
+      const response = await fetch("endpoint/make_SMS", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          // Add any additional headers as needed
+        },
+        body: JSON.stringify({
+          train_name: train.trainName,
+          train_no: train.trainNumber,
+          platform_number: train.platformNumber,
+          departure_time: train.trainTime,
+        }),
+      });
+
+      if (response.ok) {
+        // Handle success, e.g., show a success message
+        console.log("Announcement successful");
+      } else {
+        // Handle error, e.g., show an error message
+        console.error("Announcement failed");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+
+  const handleAnnouncement = (train) => {
+    try {
+      // Create a formatted string with train information
+      const announcementString = `${train.trainName} (${train.trainNumber}) departing from ${train.platformNumber} at ${train.trainTime}`;
+
+      // Navigate to Translateinfo component with the announcement string as props
+      navigate("/Translate", {
+        state: { announcement: announcementString },
+      });
+    } catch (error) {
+      console.error("Error:", error);
+    }
   };
 
   return (
@@ -54,35 +141,8 @@ export default function TrainDash() {
             <label htmlFor="email" className="flex mb-2 font-bold text-white">
               Departure Station
             </label>
-            {/*<input
-              type="email"
-              id="email"
-              className="border border-gray-400 p-2 w-full rounded-lg bg-blue-100 placeholder-black text-black"
-              value={source}
-              placeholder="Enter Departure Station"
-              onChange={(e) => setSource(e.target.value)}
-              />*/}
             <SelectTrain onSelect={handleSelectSource} />
           </div>
-
-          <div className="mb-4">
-            <label htmlFor="email" className="flex mb-2 font-bold text-white">
-              Arrival Station
-            </label>
-            {/*<input
-              type="email"
-              id="email"
-              className="border border-gray-400 p-2 w-full rounded-lg bg-blue-100 placeholder-black text-black"
-              value={destination}
-              placeholder="Enter Arrival Station"
-              onChange={(e) => setDestination(e.target.value)}
-              />*/}
-            <SelectTrain onSelect={handleSelectDestination} />
-          </div>
-
-          <label htmlFor="email" className="flex mb-2 font-bold text-white">
-            Select Departure Date
-          </label>
           <div className="z-10 border-white border-2 rounded-lg">
             <Datepicker
               primaryColor={"blue"}
@@ -101,23 +161,55 @@ export default function TrainDash() {
             SEARCH
           </button>
         </ul>
-        <ul className="mt-4">
-          <Train ticker={"CIPLA.NS"} />
-        </ul>
       </div>
 
-      <div className="mt-12 mx-2 flex-col justify-evenly sm:w-2/3">
-        <div className="flex flex-row justify-evenly mt-4">
-          {/** Where the top gainers and losers are*/}
-        </div>
+      <div className=" mt-14 py-2 flex-col justify-center items-center sm:w-3/5 mx-auto">
+        <ul role="list" class="divide-y divide-gray-100">
+          {trainData.map((train, index) => (
+            <li key={index} className="flex justify-between gap-x-6 py-5">
+              <div className="flex min-w-0">
+                <div className="min-w-0 flex-auto">
+                  <h className="text-lg font-bold leading-6 text-gray-200">
+                    {train.trainNumber}
+                  </h>
+                  <p className="text-2xl font-semibold text-white">
+                    {train.trainName}
+                  </p>
+                  <p className="mt-1 truncate text-lg leading-5 text-gray-500">
+                    {train.platformNumber}
+                  </p>
+                </div>
+              </div>
 
-        <div className="flex flex-row justify-evenly  mt-2 mb-2 w-full">
-          {/** Where nifty charts were */}
-        </div>
+              <div className="flex justify-evenly items-center gap-x-4 border-white border-2 h-10 rounded-lg p-2">
+                <p className="text-2xl font-semibold text-white">
+                  {train.trainTime}
+                </p>
+              </div>
 
-        <div className="mx-2 mt-6 my-1 flex-grow overflow-y-auto overflow-x-hidden no-scrollbar rounded-2xl">
-          <News />
-        </div>
+              <div className="flex justify-evenly items-center gap-x-4">
+                <button
+                  className="py-3 px-2 text-white font-semibold bg-blue-500 rounded-xl"
+                  onClick={() => handleAnnouncement(train)}
+                >
+                  Announcement
+                </button>
+                <button
+                  className="py-3 px-2 text-white font-semibold bg-yellow-500 rounded-xl"
+                  onClick={() => handleSMS(train)}
+                >
+                  Send SMS
+                </button>
+                <button
+                  className="py-3 px-2 text-white font-semibold bg-green-500 rounded-xl"
+                  onClick={() => handleIVRS(train)}
+                >
+                  IVRS (call)
+                </button>
+              </div>
+            </li>
+          ))}
+        </ul>
       </div>
     </div>
   );
