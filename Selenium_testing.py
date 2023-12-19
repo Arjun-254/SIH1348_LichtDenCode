@@ -6,12 +6,11 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import time
 
-service = Service(executable_path="chromedriver.exe")
-driver = webdriver.Chrome(service=service)  
 
-driver.get("https://indiarailinfo.com/")
 import json
 import re
+
+
 
 def extract_text_and_links(html_string):
     clean_text = []
@@ -54,8 +53,8 @@ def extract_text_and_links(html_string):
     for i in range(0, len(clean_text)):
         if clean_text[i] == '':
             lengths.append(i)
-    
-    for j in range(0, 2):  # Adjusted the loop range
+    j=0
+    while j<len(lengths) and j<5:  # Adjusted the loop range
         the_rest = []  # Moved inside the loop to reset for each segment
         for i in range(lengths[j], lengths[j + 1], 1):
             if "title1" in clean_text[i]:
@@ -76,6 +75,7 @@ def extract_text_and_links(html_string):
             else:
                 if len(clean_text[i]) <= 6:
                     the_rest.append(clean_text[i])
+        j += 1
         
         # Check if the_rest list has enough elements before accessing them
         if len(the_rest) >= len(train_data2):
@@ -83,15 +83,18 @@ def extract_text_and_links(html_string):
             for keys in train_data2.keys():
                 train_data2[keys].append(the_rest[k])
                 k += 1
-    return {"data1": train_data1, "data2": train_data2}
+    print(provide_cost())
+    return train_data1, train_data2
 
 
 def perform_search(station_1, station_2):
+
+
     from_station = driver.find_element(By.XPATH, '//input[@placeholder="from station"]')
     from_station.clear()
     from_station.send_keys(station_1 + Keys.DOWN + Keys.ENTER)
-    time.sleep(1)
-    driver.find_element(By.XPATH, '//div[@class="list showslow"]').click()
+    time.sleep(2)
+    driver.find_element(By.XPATH, '//div[@class="list showslow"]/table/tbody/tr').click()
     
     
 
@@ -102,14 +105,15 @@ def perform_search(station_1, station_2):
     driver.find_element(By.XPATH, '//div[@class="list showslow"]').click()
 
     # Get the HTML content of the div with class "srhres newbg inline alt"
-    link = driver.find_element(By.XPATH, '//div[@id="SrhDiv"]').click()
-    div_content = driver.find_element(By.XPATH, "//div[@class ='srhres newbg inline alt']").get_attribute("outerHTML")
+    driver.find_element(By.XPATH, '//div[@id="SrhDiv"]').click()
+    try:
+        div_content = driver.find_element(By.XPATH, "//div[@class ='srhres newbg inline alt']").get_attribute("outerHTML")
+    except:
+        return "No Trains Found"
     trian_data1,train_data2 = extract_text_and_links(div_content)
-    print(trian_data1,train_data2  )
+    return trian_data1,train_data2
     # print(text_list)
-    time.sleep(1000)
+    time.sleep(10)
     driver.quit()
 
-perform_search("Mumbai", "Delhi")
 
-driver.quit()
