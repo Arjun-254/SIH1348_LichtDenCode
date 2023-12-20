@@ -62,9 +62,8 @@ class _OCRInputState extends State<OCRInput> {
                       height: height * (250 / 804),
                       fit: BoxFit.cover,
                     ),
-                  ),
           ),
-        ),
+        )),
         Padding(
             padding:
                 const EdgeInsets.only(left: 50, right: 50, top: 8, bottom: 8),

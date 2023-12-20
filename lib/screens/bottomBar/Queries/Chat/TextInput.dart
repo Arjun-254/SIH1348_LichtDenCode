@@ -103,6 +103,35 @@ class _TextInputState extends State<TextInput> {
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
+      body: jsonEncode(<String, String>{
+        "text":
+            "Fix it and answer such that grammatical and spelling errors are corrected: $text",
+        "emotion": "Professional & Cheerful"
+      }),
+    );
+    Map<String, dynamic> data = jsonDecode(res.body);
+    var stuff = Audio.fromJson(data);
+    if (kDebugMode) {
+      print(res.statusCode);
+      print(res.body);
+    }
+    if (res.statusCode == 200) {
+      if (kDebugMode) {
+        print(res.body);
+      }
+    }
+    return [stuff.text, res.statusCode];
+  }
+
+  Future<List<Object?>> getGrammar(String text) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var token = prefs.getString('token');
+    var res = await http.post(
+      Uri.parse('$ngrokurl/grammar/'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'token': '$token'
+      },
       body: jsonEncode(
           <String, String>{"text": text, "emotion": "Professional & Cheerful"}),
     );

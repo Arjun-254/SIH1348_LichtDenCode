@@ -52,6 +52,7 @@ dependencies:
   adaptive_theme:
   flutter_onboarding_slider:
   font_awesome_flutter:
+<<<<<<< HEAD
   shimmer:
   percent_indicator:
   carousel_slider:
@@ -61,6 +62,9 @@ dependencies:
   speech_to_text:
   translator:
   intl_phone_field:
+=======
+  alan_voice: ^4.4.0
+>>>>>>> 908f9c2168d7036651cafe4a8dd4342e80bd3e9a
 
 
   # The following adds the Cupertino Icons font to your application.
