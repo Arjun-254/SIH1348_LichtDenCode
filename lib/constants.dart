@@ -1,7 +1,7 @@
 class Constants {
   double deviceHeight = 803.6363636363636;
   double deviceWidth = 392.72727272727275;
-  String url = 'https://9e49-34-143-168-214.ngrok-free.app',
+  String url = 'https://f248-34-143-168-214.ngrok-free.app',
       biggerUrl = 'https://fcd2-34-125-55-159.ngrok-free.app';
   List<String> stationList = [
     'CHHATRAPATI Shivaji Terminus',
