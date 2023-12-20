@@ -44,7 +44,7 @@ export default function TrainDash() {
   const handleSearch = async () => {
     try {
       const responseData = await fetch(
-        "https://32ec-34-125-19-12.ngrok-free.app/get_train_data",
+        "https://32cf-34-29-1-246.ngrok-free.app/get_train_data",
         {
           method: "POST",
           headers: {
@@ -114,7 +114,7 @@ export default function TrainDash() {
   const handleIVRS = async (train) => {
     try {
       const response = await fetch(
-        "https://32ec-34-125-19-12.ngrok-free.app/make_call",
+        "https://32cf-34-29-1-246.ngrok-free.app/make_call",
         {
           method: "POST",
           headers: {
@@ -145,7 +145,7 @@ export default function TrainDash() {
   const handleSMS = async (train) => {
     try {
       const response = await fetch(
-        "https://32ec-34-125-19-12.ngrok-free.app/make_SMS",
+        "https://32cf-34-29-1-246.ngrok-free.app/make_SMS",
         {
           method: "POST",
           headers: {

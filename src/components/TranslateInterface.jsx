@@ -37,7 +37,7 @@ export const TranslateInterface = () => {
   const [suggestions, setSuggestions] = useState([]);
 
   const mimeType = "audio/webm";
-  const ngrokurl = "https://38e8-34-71-168-160.ngrok-free.app";
+  const ngrokurl = "https://b3d0-34-125-31-103.ngrok-free.app";
   //in built api reference
   const mediaRecorder = useRef(null);
 
@@ -187,6 +187,7 @@ export const TranslateInterface = () => {
         if (response.ok) {
           const data = await response.json();
           setTranscription(data.text);
+          setSrcLang(data.src_lang);
           setMessages([...messages, { type: "user", content: data.text }]);
         } else {
           alert("Transcription failed");
@@ -269,6 +270,7 @@ export const TranslateInterface = () => {
   const handleChoose = (selectedOptions) => {
     setLang(selectedOptions.value);
   };
+  const [srcLang, setSrcLang] = useState("en_XX"); //set default to english for source
 
   return (
     <div className="flex flex-col bg-gradient-to-b bg-cover bg-center from-white via-blue-100 to-cyan-300 h-screen max-h-screen mt-6 pt-10 no-scrollbar overflow-y-auto ">
@@ -283,6 +285,7 @@ export const TranslateInterface = () => {
             type={message.type}
             content={message.content}
             lang={lang}
+            srcLang={srcLang}
           />
         ))}
       </div>

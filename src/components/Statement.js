@@ -27,14 +27,30 @@ export default function Statement() {
                   />
                 </p>
               </dl>
-              <div className="flex mt-6">
+              <div className="flex mt-6 gap-x-4">
                 <button
                   className=" animate-bounce flex justify-center items-center text-sm font-semibold leading-6 text-gray-200 py-3 px-12 bg-blue-600 hover:bg-blue-700 rounded-md transition-all duration-150 ease-in-out border-2  border-blue-600"
                   onClick={() => {
                     navigate("/Assistant");
                   }}
                 >
-                  Try our AI Assistant
+                  Try our AI Travel Assistant
+                </button>
+                <button
+                  className=" animate-bounce flex justify-center items-center text-sm font-semibold leading-6 text-gray-200 py-3 px-12 bg-blue-600 hover:bg-blue-700 rounded-md transition-all duration-150 ease-in-out border-2  border-blue-600"
+                  onClick={() => {
+                    navigate("/Dashboard");
+                  }}
+                >
+                  Open Admin Dashboard
+                </button>
+                <button
+                  className=" animate-bounce flex justify-center items-center text-sm font-semibold leading-6 text-gray-200 py-3 px-12 bg-blue-600 hover:bg-blue-700 rounded-md transition-all duration-150 ease-in-out border-2  border-blue-600"
+                  onClick={() => {
+                    navigate("/Translate");
+                  }}
+                >
+                  Translator
                 </button>
               </div>
             </div>

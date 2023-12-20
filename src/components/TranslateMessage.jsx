@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { Bars, CirclesWithBar, Audio, Puff, Dna } from "react-loader-spinner";
 import { FaMicrophone } from "react-icons/fa";
 
-const TranslateMessage = ({ type, lang, content }) => {
+const TranslateMessage = ({ type, lang, srcLang, content }) => {
   // State variables
   //console.log(localStorage.getItem("access_token"));
   const [transcription, setTranscription] = useState("");
@@ -27,14 +27,22 @@ const TranslateMessage = ({ type, lang, content }) => {
   const [correctedText, setCorrectedText] = useState("");
 
   const mimeType = "audio/webm";
-  const ngrokurl = "https://38e8-34-71-168-160.ngrok-free.app"; //everything
+  const ngrokurl = "https://b3d0-34-125-31-103.ngrok-free.app"; //everything
   //in built api reference
   const mediaRecorder = useRef(null);
 
   const handleSound = async () => {
     setclickspeak(true);
     try {
-      const response = await fetch(ngrokurl + "/tamil-tts", {
+      let endpoint;
+      if (lang === "ta_IN") {
+        endpoint = "https://32cf-34-29-1-246.ngrok-free.app/tamil-tts";
+      } else if (lang === "gu_IN") {
+        endpoint = "https://32cf-34-29-1-246.ngrok-free.app/gujarati-tts";
+      } else {
+        endpoint = "https://32cf-34-29-1-246.ngrok-free.app/coqui-tts";
+      }
+      const response = await fetch(endpoint, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -105,9 +113,10 @@ const TranslateMessage = ({ type, lang, content }) => {
     //To translate to tamil rn
     try {
       setLoading(true); // Set loading to true when the request starts
-
+      console.log(srcLang);
+      console.log(lang);
       const response = await fetch(
-        "https://32ec-34-125-19-12.ngrok-free.app" + "/translate", //translate different
+        "https://32cf-34-29-1-246.ngrok-free.app" + "/translate", //translate different
         {
           method: "POST",
           headers: {
@@ -116,8 +125,8 @@ const TranslateMessage = ({ type, lang, content }) => {
           },
           body: JSON.stringify({
             text: content,
-            src_lang: "en_XX",
-            tgt_lang: "ta_IN",
+            src_lang: srcLang,
+            tgt_lang: lang,
             emotion: "Neutral",
           }),
         }
@@ -127,7 +136,6 @@ const TranslateMessage = ({ type, lang, content }) => {
         const falcon_response = await response.json();
         setFalcon(falcon_response.translated_text);
         console.log(falcon_response);
-        handleSound();
       } else {
         console.log("model dead");
       }

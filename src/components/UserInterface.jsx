@@ -30,7 +30,7 @@ export const UserInterface = () => {
   const [suggestions, setSuggestions] = useState([]);
 
   const mimeType = "audio/webm";
-  const ngrokurl = "https://38e8-34-71-168-160.ngrok-free.app";
+  const ngrokurl = "https://b3d0-34-125-31-103.ngrok-free.app";
   //in built api reference
   const mediaRecorder = useRef(null);
 
