@@ -47,8 +47,8 @@ const Login = () => {
         },
       }
     );
-
-    if (res.status === 200) {
+    console.log(res);
+    if (res.data.message === "Login Successful") {
       flag = true;
       localStorage.setItem("flag", flag);
       localStorage.setItem("name", res.data.name);
@@ -182,7 +182,7 @@ const Login = () => {
           <div className="flex justify-center items-center">
             <p className=" text-white">
               Don't have an account?{" "}
-              <Link to="/register" className="text-blue-500">
+              <Link to="/signup" className="text-blue-500">
                 SignUp
               </Link>
             </p>

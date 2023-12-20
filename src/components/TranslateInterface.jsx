@@ -267,6 +267,12 @@ export const TranslateInterface = () => {
 
   return (
     <div className="flex flex-col bg-gradient-to-b bg-cover bg-center from-white via-blue-100 to-cyan-300 h-screen max-h-screen mt-6 pt-10 no-scrollbar overflow-y-auto ">
+      <div className="flex justify-center items-center mx-auto p-2 my-4 rounded-3xl bg-gradient-to-r from-gray-400 via-gray-300 to-gray-500 w-3/6">
+        <p className="text-gray-900 font-bold">On-the-fly Translation Engine</p>
+      </div>
+      <p className="text-gray-800 font-semibold flex justify-center items-center mx-auto ">
+        Start Translation by clicking &rarr; <b> Get Microphone</b>.
+      </p>
       <div
         className="flex-grow chat-container overflow-y-auto no-scrollbar py-2"
         style={{ maxHeight: "calc(100vh - 160px)", overflow: "auto" }}

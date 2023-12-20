@@ -206,6 +206,15 @@ export const UserInterface = () => {
 
   return (
     <div className="flex flex-col bg-gradient-to-b bg-cover bg-center from-white via-blue-100 to-cyan-300 h-screen max-h-screen mt-6 pt-10 no-scrollbar overflow-y-auto ">
+      <div className="flex justify-center items-center mx-auto p-2 my-4 rounded-3xl bg-gradient-to-r from-gray-400 via-gray-300 to-gray-500 w-3/6">
+        <p className="text-gray-900 font-bold">
+          Welcome to Railway Mitra - the chat assistant for real-time-queries.
+        </p>
+      </div>
+      <p className="text-gray-800 font-semibold flex justify-center items-center mx-auto ">
+        Ask any doubts regarding the Indian Railway by clicking &rarr; Get
+        Microphone.
+      </p>
       <div
         className="flex-grow chat-container overflow-y-auto no-scrollbar py-2"
         style={{ maxHeight: "calc(100vh - 160px)", overflow: "auto" }}
@@ -219,7 +228,7 @@ export const UserInterface = () => {
           />
         ))}
       </div>
-      <div className="justify-end bottom-0 left-0 right-0 bg-blue-100 border-1 py-6 px-2">
+      <div className="justify-center items-center mx-auto flex bottom-0 left-0 right-0 bg-gray-200 border-1 py-6 px-2 w-5/6 rounded-3xl mb-6">
         <div className="flex flex-row justify-between w-full ">
           <div className="audio-controls space-y-2 flex flex-row justify-center items-center">
             {!permission ? (
@@ -313,9 +322,9 @@ export const UserInterface = () => {
             )}
             <button
               onClick={handleTranscribe}
-              className=" hover:animate-pulse bg-gradient-to-r from-pink-300 via-violet-300 to-purple-400 text-white font-bold shadow-md py-2 px-6 ml-2 rounded-full focus:outline-none focus:shadow-outline"
+              className=" hover:animate-pulse bg-gradient-to-r from-green-300 via-green-300 to-green-400 font-bold shadow-md py-2 px-6 ml-2 rounded-full focus:outline-none focus:shadow-outline"
             >
-              Transcribe
+              Get Answer
             </button>
           </div>
         </div>
