@@ -16,7 +16,7 @@ const Computers = ({ isMobile }) => {
       <ambientLight intensity={0.5} color="blue" />
       <primitive
         object={computer.scene}
-        scale={isMobile ? 2 : 1.2}
+        scale={isMobile ? 3 : 1.2}
         position={isMobile ? [0, -3, -0.5] : [0, 0, -0.5]}
         rotation={[0, Math.PI / 2, 0]} // Rotate around the center plane
       />

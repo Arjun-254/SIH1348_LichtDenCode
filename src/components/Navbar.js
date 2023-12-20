@@ -1,5 +1,6 @@
 import React, { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import image from "/Users/ameet/SIH-2023/src/assets/better.png";
 
 export default function Navbar() {
   const navigate = useNavigate();
@@ -46,6 +47,17 @@ export default function Navbar() {
               </svg>
             </button>
           </div>
+          <div
+            onClick={() => {
+              navigate("/");
+            }}
+          >
+            <img
+              src={image}
+              alt="indian rail logo"
+              className="h-12 top-2 left-3 absolute"
+            />
+          </div>
           <div className="hidden lg:flex lg:gap-x-12">
             <a
               className="text-md font-semibold leading-6 text-gray-200 hover:font-extrabold hover:shadow-xl transition-all ease-in duration-100 p-2 rounded-lg "
@@ -61,30 +73,11 @@ export default function Navbar() {
             <a
               className="text-md font-semibold leading-6 text-gray-200 hover:font-extrabold hover:shadow-xl transition-all ease-in duration-100 p-2 rounded-lg"
               onClick={() => {
-                navigate("/doc");
+                navigate("/Manual");
               }}
             >
-              Document Checker
+              User Manual
             </a>
-            {isLoggedIn ? (
-              <a
-                className="text-md font-semibold leading-6 text-gray-200 hover:font-extrabold hover:shadow-xl transition-all ease-in duration-100 p-2 rounded-lg"
-                onClick={() => {
-                  navigate("/Assistant");
-                }}
-              >
-                {localStorage.getItem("name")}'s Chat
-              </a>
-            ) : (
-              <a
-                className="text-md font-semibold leading-6 text-gray-200 hover:font-extrabold hover:shadow-xl transition-all ease-in duration-100 p-2 rounded-lg"
-                onClick={() => {
-                  navigate("/");
-                }}
-              >
-                About Us
-              </a>
-            )}
           </div>
           {!isLoggedIn && (
             <div className="hidden lg:flex lg:flex-1 lg:justify-end">

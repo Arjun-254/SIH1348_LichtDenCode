@@ -4,47 +4,21 @@ import { Typewriter } from "react-simple-typewriter";
 import { resolvePath, useNavigate } from "react-router-dom";
 import SelectTrain from "../components/SelectTrain";
 import Datepicker from "react-tailwindcss-datepicker";
+import { Puff } from "react-loader-spinner";
 
 export default function TrainDash() {
   const navigate = useNavigate();
+
   const [source, setSource] = useState("");
   const [destination, setDestination] = useState("");
   const [inputData, setInputData] = useState([]);
-  // const inputData = {
-  //   train_data1: {
-  //     train_name: [
-  //       "Churchgate - Virar Slow Local",
-  //       "Churchgate - Borivali Slow Local",
-  //       "Mumbai CSMT - Goregaon Slow Local",
-  //       "Churchgate - Virar Fast Local",
-  //       "Churchgate - Borivali Slow Local",
-  //     ],
-  //     train_no: ["90017", "90021", "98701", "90027", "90025"],
-  //     total_votes: ["0", "0", "0", "0", "0"],
-  //     cleanliness: ["0", "0", "0", "0", "0"],
-  //     punctuality: ["0", "0", "0", "0", "0"],
-  //     food: ["0", "0", "0", "0", "0"],
-  //     ticket: ["0", "0", "0", "0", "0"],
-  //     safety: ["0", "0", "0", "0", "0"],
-  //   },
-  //   train_data2: {
-  //     Type: ["Mumb", "Mumb", "Mumb", "Mumb", "Mumb"],
-  //     Zone: ["WR", "WR", "CR", "WR", "WR"],
-  //     From: ["DDR", "DDR", "KCE", "DDR", "DDR"],
-  //     PFfrom: ["1", "1", "1", "1", "1"],
-  //     Dep: ["04:36", "04:40", "04:49", "04:57", "04:59"],
-  //     AvgDelay: ["-", "-", "-", "-", "-"],
-  //     To: ["VLP", "VLP", "VLP", "ADH", "VLP"],
-  //     PFto: ["3", "3", "1", "3", "3"],
-  //     Arr: ["04:52", "04:56", "05:04", "05:11", "05:15"],
-  //   },
-  // };
-
+  const [isLoading, setIsLoading] = useState(false);
   // Function to handle the Search
   const handleSearch = async () => {
+    setIsLoading(true);
     try {
       const responseData = await fetch(
-        "https://6a71-34-134-133-58.ngrok-free.app/get_train_data",
+        "https://f696-34-75-107-118.ngrok-free.app/get_train_data",
         {
           method: "POST",
           headers: {
@@ -88,6 +62,7 @@ export default function TrainDash() {
     } catch (error) {
       console.error("Error:", error);
     }
+    setIsLoading(false);
   };
   const [value, setValue] = useState({
     startDate: null,
@@ -114,7 +89,7 @@ export default function TrainDash() {
   const handleIVRS = async (train) => {
     try {
       const response = await fetch(
-        "https://6a71-34-134-133-58.ngrok-free.app/make_call",
+        "https://f696-34-75-107-118.ngrok-free.app/make_call",
         {
           method: "POST",
           headers: {
@@ -145,7 +120,7 @@ export default function TrainDash() {
   const handleSMS = async (train) => {
     try {
       const response = await fetch(
-        "https://6a71-34-134-133-58.ngrok-free.app/make_SMS",
+        "https://f696-34-75-107-118.ngrok-free.app/make_SMS",
         {
           method: "POST",
           headers: {
@@ -192,12 +167,12 @@ export default function TrainDash() {
 
       <div className="flex flex-col mt-12 p-5 items-left h-screen mb-10 rounded-lg overflow-y-auto overflow-x-hidden sm:w-1/3 bg-gray-800 no-scrollbar">
         <div className="flex flex-row justify-between">
-          <p className="mt-2 text-left text-6xl font-extrabold tracking-tight text-white sm:text-3xl">
+          <p className="mt-2 p-3 text-left text-6xl font-extrabold tracking-tight text-white sm:text-3xl">
             <Typewriter
-              words={["Enter Details"]}
+              words={["RAILWAY ADMIN PORTAL"]}
               cursor
-              cursorStyle="."
-              loop={2}
+              cursorStyle=""
+              // loop={1}
             />
           </p>
         </div>
@@ -231,9 +206,29 @@ export default function TrainDash() {
             SEARCH
           </button>
         </ul>
+        {isLoading && (
+          <div className="flex items-center justify-center my-4">
+            <Puff
+              height="80"
+              width="80"
+              color="#009CFF"
+              wrapperStyle={{}}
+              wrapperClass=""
+              visible={true}
+              outerCircleColor=""
+              innerCircleColor=""
+              ariaLabel="circles-with-bar-loading"
+            />
+          </div>
+        )}
       </div>
 
       <div className=" mt-14 py-2 flex-col justify-center items-center sm:w-3/5 mx-auto">
+        <div className="flex justify-center items-center mx-auto p-2 my-4 rounded-3xl bg-gradient-to-r from-gray-400 via-gray-300 to-gray-500 w-5/6">
+          <p className="text-gray-900 font-bold">
+            Admin Dashboard to Manage the Station Announcements, SMS and IVRS.
+          </p>
+        </div>
         <ul
           role="list"
           class="divide-y divide-gray-100 max-h-screen overflow-y-auto no-scrollbar"

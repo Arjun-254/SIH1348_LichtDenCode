@@ -28,28 +28,25 @@ const ChatMessage = ({ type, content }) => {
   const [correctedText, setCorrectedText] = useState("");
 
   const mimeType = "audio/webm";
-  const ngrokurl = "https://0850-34-16-192-5.ngrok-free.app";
+  const ngrokurl = "https://f304-34-91-60-225.ngrok-free.app";
   //in built api reference
   const mediaRecorder = useRef(null);
 
   const handleSound = async () => {
     setclickspeak(true);
     try {
-      const response = await fetch(
-        "https://ee48-34-125-144-173.ngrok-free.app" + "/coqui-tts",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            token: localStorage.getItem("access_token"),
-            // Specify JSON content type
-          },
-          body: JSON.stringify({
-            text: falcon,
-            emotion: "cheerful",
-          }),
-        }
-      );
+      const response = await fetch(ngrokurl + "/labs-tts", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          token: localStorage.getItem("access_token"),
+          // Specify JSON content type
+        },
+        body: JSON.stringify({
+          text: falcon,
+          emotion: "cheerful",
+        }),
+      });
 
       if (response.ok) {
         const responseData = await response.blob(); // Get the binary response data

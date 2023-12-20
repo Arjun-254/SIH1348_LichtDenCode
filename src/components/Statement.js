@@ -1,61 +1,97 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Threemodel from "./Threemodel";
 import { Typewriter } from "react-simple-typewriter";
 import { useNavigate } from "react-router-dom";
 
 export default function Statement() {
   const navigate = useNavigate();
+  const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem("flag"));
   return (
-    <div className="overflow-hidden py-6 sm:py-18 ">
-      <div className="mx-auto max-w-7xl px-10 lg:px-14">
-        <div className="mx-auto grid max-w-2xl grid-cols-1 gap-y-16 sm:gap-y-20 lg:mx-0 lg:max-w-none lg:grid-cols-2 ">
-          <div className="lg:pl-12 h-screen flex items-center justify-center pb-44">
-            <div className="lg:max-w-lg">
-              <h2 className="md:text-xl text-2xl font-bold leading-7 text-gray-700">
-                Your personal travel companion
-              </h2>
-              <p className="md:text-9xl font-bold flex justify-center items-center tracking-tight bg-gradient-to-r from-blue-400 to-blue-700 bg-clip-text text-transparent text-9xl">
-                Railway Mitra
-              </p>
-              <dl className="mt-4 max-w-9xl space-y-8 text-base leading-7 text-slate-200 lg:max-w-none">
-                <p className="md:text-xl font-bold flex  tracking-tight bg-gradient-to-r from-gray-500 to-gray-900 bg-clip-text text-transparent text-xl">
-                  <Typewriter
-                    words={["Official AI companion of Indian Railways"]}
-                    cursor
-                    cursorStyle="."
-                    loop={0}
-                  />
-                </p>
+    <div>
+      <div className="mx-auto max-w-2xl py-24 h-screen">
+        <div className="hidden sm:mb-8 sm:flex sm:justify-center">
+          <div className="relative rounded-full px-3 py-1 text-sm leading-6 text-gray-600 ring-1 ring-gray-900/10 hover:ring-gray-900/20">
+            For first time users{" "}
+            <a href="/Manual" className="font-semibold text-indigo-600">
+              <span className="absolute inset-0" aria-hidden="true" />
+              Click for the manual <span aria-hidden="true">&rarr;</span>
+            </a>
+          </div>
+        </div>
+        <div className="text-center">
+          <h1 className="text-6xl font-bold tracking-tight text-gray-900 sm:text-8xl">
+            Railway Mitron
+          </h1>
+        </div>
+        <div className="flex flex-row items-center justify-center">
+          <div className="py-10 min-h-42">
+            <div className="mx-auto max-w-7xl px-6 lg:px-8">
+              <dl className="grid grid-cols-1 gap-x-8 gap-y-16 text-center lg:grid-cols-3">
+                <div className="mx-auto flex max-w-xs flex-col gap-y-4">
+                  <button
+                    className="flex justify-center items-center text-xl font-semibold leading-6 text-gray-200 py-3 px-12 bg-gradient-to-r bg-cover bg-center from-indigo-600 to-blue-600 hover:bg-blue-900 hover:animate-pulse rounded-md transition-all duration-150 ease-in-out border-2  border-blue-600"
+                    onClick={() => {
+                      navigate("/Assistant");
+                    }}
+                  >
+                    Information through chatbots
+                  </button>
+                  <span aria-hidden="true">&uarr;</span>
+                  <h1 className="text-lg font-bold tracking-tight text-gray-900 sm:text-lg">
+                    Click to open the chat assistant for real-time-queries.
+                  </h1>
+                </div>
               </dl>
-              <div className="flex mt-6 gap-x-4">
-                <button
-                  className=" animate-bounce flex justify-center items-center text-sm font-semibold leading-6 text-gray-200 py-3 px-12 bg-blue-600 hover:bg-blue-700 rounded-md transition-all duration-150 ease-in-out border-2  border-blue-600"
-                  onClick={() => {
-                    navigate("/Assistant");
-                  }}
-                >
-                  Try our AI Travel Assistant
-                </button>
-                <button
-                  className=" animate-bounce flex justify-center items-center text-sm font-semibold leading-6 text-gray-200 py-3 px-12 bg-blue-600 hover:bg-blue-700 rounded-md transition-all duration-150 ease-in-out border-2  border-blue-600"
-                  onClick={() => {
-                    navigate("/Dashboard");
-                  }}
-                >
-                  Open Admin Dashboard
-                </button>
-                <button
-                  className=" animate-bounce flex justify-center items-center text-sm font-semibold leading-6 text-gray-200 py-3 px-12 bg-blue-600 hover:bg-blue-700 rounded-md transition-all duration-150 ease-in-out border-2  border-blue-600"
-                  onClick={() => {
-                    navigate("/Translate");
-                  }}
-                >
-                  Translator
-                </button>
-              </div>
             </div>
           </div>
-          <Threemodel />
+
+          <div className="py-10 min-h-42 mt-14">
+            <div className="mx-auto max-w-7xl px-6 lg:px-8">
+              <dl className="grid grid-cols-1 gap-x-8 gap-y-16 text-center lg:grid-cols-3">
+                <div className="mx-auto flex max-w-xs flex-col gap-y-4">
+                  <button
+                    className="flex justify-center items-center text-xl font-semibold leading-6 text-gray-200 py-3 px-12 bg-blue-600 hover:bg-blue-900 hover:animate-pulse rounded-md transition-all duration-150 ease-in-out"
+                    onClick={() => {
+                      if (isLoggedIn == false) {
+                        navigate("/login");
+                      } else {
+                        navigate("/dashboard");
+                      }
+                    }}
+                  >
+                    Railway Admin Dashboard
+                  </button>
+                  <span aria-hidden="true">&uarr;</span>
+                  <h1 className="text-lg font-bold tracking-tight text-gray-900 sm:text-lg">
+                    Click to access the Admin Dashboard to Manage the Station
+                    Announcements and IVRS.
+                  </h1>
+                </div>
+              </dl>
+            </div>
+          </div>
+
+          <div className="py-10 min-h-42">
+            <div className="mx-auto max-w-7xl px-6 lg:px-8">
+              <dl className="grid grid-cols-1 gap-x-8 gap-y-16 text-center lg:grid-cols-3">
+                <div className="mx-auto flex max-w-xs flex-col gap-y-4">
+                  <button
+                    className="flex justify-center items-center text-xl font-semibold leading-6 text-gray-200 py-3 px-12 bg-gradient-to-r  from-blue-600 to-indigo-600 hover:bg-blue-900 hover:animate-pulse rounded-md transition-all duration-150 ease-in-out border-2  "
+                    onClick={() => {
+                      navigate("/Translate");
+                    }}
+                  >
+                    On the fly translation Engine
+                  </button>
+                  <span aria-hidden="true">&uarr;</span>
+                  <h1 className="text-lg font-bold tracking-tight text-gray-900 sm:text-lg">
+                    Click for speech to speech translation in required
+                    languages.
+                  </h1>
+                </div>
+              </dl>
+            </div>
+          </div>
         </div>
       </div>
     </div>

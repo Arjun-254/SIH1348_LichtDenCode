@@ -27,7 +27,7 @@ const TranslateMessage = ({ type, lang, srcLang, content }) => {
   const [correctedText, setCorrectedText] = useState("");
 
   const mimeType = "audio/webm";
-  const ngrokurl = "https://0850-34-16-192-5.ngrok-free.app"; //everything
+  const ngrokurl = "https://f304-34-91-60-225.ngrok-free.app"; //everything
   //in built api reference
   const mediaRecorder = useRef(null);
 
@@ -35,13 +35,7 @@ const TranslateMessage = ({ type, lang, srcLang, content }) => {
     setclickspeak(true);
     try {
       let endpoint;
-      if (lang === "ta_IN") {
-        endpoint = "https://6a71-34-134-133-58.ngrok-free.app/tamil-tts";
-      } else if (lang === "gu_IN") {
-        endpoint = "https://6a71-34-134-133-58.ngrok-free.app/gujarati-tts";
-      } else {
-        endpoint = "https://6a71-34-134-133-58.ngrok-free.app/coqui-tts";
-      }
+      endpoint = ngrokurl + "/labs-tts";
       const response = await fetch(endpoint, {
         method: "POST",
         headers: {
@@ -116,7 +110,7 @@ const TranslateMessage = ({ type, lang, srcLang, content }) => {
       console.log(srcLang);
       console.log(lang);
       const response = await fetch(
-        "https://6a71-34-134-133-58.ngrok-free.app" + "/translate", //translate different
+        "https://f696-34-75-107-118.ngrok-free.app" + "/gtranslate", //translate different
         {
           method: "POST",
           headers: {
@@ -134,7 +128,7 @@ const TranslateMessage = ({ type, lang, srcLang, content }) => {
 
       if (response.ok) {
         const falcon_response = await response.json();
-        setFalcon(falcon_response.translated_text);
+        setFalcon(falcon_response.data.translations[0].translatedText);
         console.log(falcon_response);
       } else {
         console.log("model dead");
