@@ -27,7 +27,7 @@ const TranslateMessage = ({ type, lang, srcLang, content }) => {
   const [correctedText, setCorrectedText] = useState("");
 
   const mimeType = "audio/webm";
-  const ngrokurl = "https://b3d0-34-125-31-103.ngrok-free.app"; //everything
+  const ngrokurl = "https://0850-34-16-192-5.ngrok-free.app"; //everything
   //in built api reference
   const mediaRecorder = useRef(null);
 
@@ -36,11 +36,11 @@ const TranslateMessage = ({ type, lang, srcLang, content }) => {
     try {
       let endpoint;
       if (lang === "ta_IN") {
-        endpoint = "https://32cf-34-29-1-246.ngrok-free.app/tamil-tts";
+        endpoint = "https://6a71-34-134-133-58.ngrok-free.app/tamil-tts";
       } else if (lang === "gu_IN") {
-        endpoint = "https://32cf-34-29-1-246.ngrok-free.app/gujarati-tts";
+        endpoint = "https://6a71-34-134-133-58.ngrok-free.app/gujarati-tts";
       } else {
-        endpoint = "https://32cf-34-29-1-246.ngrok-free.app/coqui-tts";
+        endpoint = "https://6a71-34-134-133-58.ngrok-free.app/coqui-tts";
       }
       const response = await fetch(endpoint, {
         method: "POST",
@@ -116,7 +116,7 @@ const TranslateMessage = ({ type, lang, srcLang, content }) => {
       console.log(srcLang);
       console.log(lang);
       const response = await fetch(
-        "https://32cf-34-29-1-246.ngrok-free.app" + "/translate", //translate different
+        "https://6a71-34-134-133-58.ngrok-free.app" + "/translate", //translate different
         {
           method: "POST",
           headers: {
