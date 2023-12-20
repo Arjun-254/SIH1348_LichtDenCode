@@ -1,16 +1,16 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sih/screens/Drawer/Drawer.dart';
 import 'package:sih/screens/Profile.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'bottomBar/AudioInput.dart';
-import 'bottomBar/Chat/TextInput.dart';
-import 'bottomBar/OCRInput.dart';
+import 'package:sih/screens/bottomBar/Dashboard/Dashboard.dart';
+import 'package:sih/screens/bottomBar/Queries/Queries.dart';
+import 'package:sih/screens/bottomBar/News/NewsPage.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class UserPage extends StatefulWidget {
-  const UserPage({Key? key, required this.token}) : super(key: key);
-
-  final String token;
+  const UserPage({Key? key}) : super(key: key);
 
   @override
   State<UserPage> createState() => _UserPageState();
@@ -18,11 +18,18 @@ class UserPage extends StatefulWidget {
 
 class _UserPageState extends State<UserPage> {
   int currentIndex = 1;
-  final screens = const [
-    OCRInput(),
-    TextInput(),
-    AudioInput(),
-  ];
+  final screens = const [Dashboard(), Queries(), FlutterNews()];
+  bool? isLoggedIn = false;
+
+  @override
+  void initState() {
+    super.initState();
+    getLoginDetails();
+  }
+
+  getLoginDetails() async {
+    bool? isLoggedIn = await getLoginFlagValuesSF() ?? false;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,8 +39,9 @@ class _UserPageState extends State<UserPage> {
     return SafeArea(
       child: Scaffold(
         extendBodyBehindAppBar: true,
-        extendBody: true,
+        //extendBody: true,
         appBar: AppBar(
+          iconTheme: const IconThemeData(color: Colors.white),
           elevation: 0,
           backgroundColor: Colors.transparent,
           actions: [
@@ -67,10 +75,7 @@ class _UserPageState extends State<UserPage> {
             ),
             child: BottomNavigationBar(
               backgroundColor: Colors.cyan[500],
-              selectedItemColor: Colors.white,
-              unselectedItemColor: Colors.grey[900],
-              selectedIconTheme: const IconThemeData(color: Colors.white),
-              unselectedIconTheme: IconThemeData(color: Colors.grey[900]),
+              selectedItemColor: Colors.black,
               selectedFontSize: 18,
               unselectedFontSize: 14,
               iconSize: 27,
@@ -81,32 +86,44 @@ class _UserPageState extends State<UserPage> {
               }),
               items: [
                 BottomNavigationBarItem(
+                    icon: Icon(
+                      Icons.announcement_outlined,
+                      color: Colors.grey[900],
+                    ),
+                    label: "Announce"),
+                BottomNavigationBarItem(
                   icon: FaIcon(
-                    Icons.video_camera_back_outlined,
+                    Icons.question_answer_outlined,
                     color: Colors.grey[900],
                   ),
-                  label: AppLocalizations.of(context)!.camera,
+                  label: AppLocalizations.of(context)!.qna,
                 ),
                 BottomNavigationBarItem(
                   icon: Icon(
-                    Icons.text_format_outlined,
+                    Icons.train_outlined,
                     color: Colors.grey[900],
                   ),
-                  label: AppLocalizations.of(context)!.text,
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(
-                    Icons.audiotrack_outlined,
-                    color: Colors.grey[900],
-                  ),
-                  label: AppLocalizations.of(context)!.audio,
+                  label: AppLocalizations.of(context)!.news,
                 ),
               ],
             ),
           ),
         ),
-        drawer: const NavigationDrawer1(),
+        drawer: NavigationDrawer1(isLoggedIn: isLoggedIn!),
       ),
     );
   }
+}
+
+Future<bool?> getLoginFlagValuesSF() async {
+  try {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool? isLoggedIn = prefs.getBool('isLoggedIn');
+    return isLoggedIn;
+  } catch (e) {
+    if (kDebugMode) {
+      print(e.toString());
+    }
+  }
+  return null;
 }

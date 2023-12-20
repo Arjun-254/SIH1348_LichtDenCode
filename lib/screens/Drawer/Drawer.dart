@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../../HomePage.dart';
+import 'package:sih/screens/Drawer/IVRS/IVRSHomePage.dart';
 import 'Setting.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class NavigationDrawer1 extends StatelessWidget {
-  const NavigationDrawer1({Key? key}) : super(key: key);
+  const NavigationDrawer1({Key? key, required this.isLoggedIn})
+      : super(key: key);
+  final bool isLoggedIn;
 
   @override
   Widget build(BuildContext context) {
@@ -46,6 +48,22 @@ class NavigationDrawer1 extends StatelessWidget {
                   MaterialPageRoute(builder: (context) => const Setting()));
             },
           ),
+          ListTile(
+            leading: const Icon(
+              Icons.call,
+              color: Colors.black,
+              size: 30,
+            ),
+            title: Text(AppLocalizations.of(context)!.ivrs,
+                style: const TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.w700,
+                    fontSize: 20)),
+            onTap: () {
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => const IVRSHomePage()));
+            },
+          ),
           const Divider(
             color: Colors.black,
             thickness: 1,
@@ -65,12 +83,6 @@ class NavigationDrawer1 extends StatelessWidget {
                 SharedPreferences prefs = await SharedPreferences.getInstance();
                 await prefs.setBool('isLoggedIn', false);
                 await prefs.setString('token', '');
-                Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(
-                      builder: (BuildContext context) => const HomePage()),
-                  ModalRoute.withName('/'),
-                );
               }),
         ]),
       ]));

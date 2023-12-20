@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:model_viewer_plus/model_viewer_plus.dart';
-import 'package:sih/screens/AudioInitial.dart';
 import 'package:sih/screens/robot.dart';
 import '../constants.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -25,7 +24,11 @@ class _ChooseLanguageState extends State<ChooseLanguage> {
           gradient: LinearGradient(
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
-              colors: [Colors.white, Colors.blue[200]!, Colors.cyan[300]!]),
+              colors: [
+                Colors.grey[900]!,
+                Colors.black,
+                Colors.grey[900]!,
+              ]),
         ),
         child: Scaffold(
           backgroundColor: Colors.transparent,

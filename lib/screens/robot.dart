@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:model_viewer_plus/model_viewer_plus.dart';
-import '../HomePage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sih/screens/UserPage.dart';
 import '../constants.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -24,7 +25,11 @@ class _RobotState extends State<Robot> {
           gradient: LinearGradient(
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
-              colors: [Colors.white, Colors.blue[200]!, Colors.cyan[300]!]),
+              colors: [
+                Colors.grey[900]!,
+                Colors.black,
+                Colors.grey[900]!,
+              ]),
         ),
         child: Scaffold(
           backgroundColor: Colors.transparent,
@@ -75,7 +80,10 @@ class _RobotState extends State<Robot> {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: ElevatedButton(
-                    onPressed: () {
+                    onPressed: () async {
+                      SharedPreferences prefs =
+                          await SharedPreferences.getInstance();
+                      prefs.setBool('isFirstInstall', true);
                       Navigator.of(context).push(_createRoute());
                     },
                     style: ElevatedButton.styleFrom(
@@ -113,7 +121,7 @@ class _RobotState extends State<Robot> {
 
   Route _createRoute() {
     return PageRouteBuilder(
-      pageBuilder: (context, animation, secondaryAnimation) => const HomePage(),
+      pageBuilder: (context, animation, secondaryAnimation) => const UserPage(),
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
         const begin = Offset(1.0, 0.0);
         const end = Offset.zero;

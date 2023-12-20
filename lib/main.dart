@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:sih/language/changeLanguageDropdown.dart';
+import 'package:sih/HomePage.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:sih/l10n/l10n.dart';
@@ -81,7 +81,7 @@ class _MainAppState extends State<MainApp> {
             theme: theme,
             darkTheme: darkTheme,
             scaffoldMessengerKey: messengerKey,
-            home: const SelectLanguageDropdown(),
+            home: const HomePage(),
           );
         });
   }

@@ -9,10 +9,10 @@ import 'package:flutter/services.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../../models/AudioModel.dart';
-import '../../helpers/Utils.dart';
+import '../../../models/AudioModel.dart';
+import '../../../helpers/Utils.dart';
 import 'package:http/http.dart' as http;
-import '../../constants.dart';
+import '../../../constants.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class OCRInput extends StatefulWidget {
@@ -36,22 +36,35 @@ class _OCRInputState extends State<OCRInput> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Padding(
-            padding: const EdgeInsets.all(20),
+          padding: const EdgeInsets.all(20),
+          child: Container(
+            decoration: BoxDecoration(
+              border: Border.all(width: 4, color: const Color(0xFF009CFF)),
+              borderRadius: BorderRadius.circular(20),
+            ),
             child: image == null
-                ? Image(
-                    image: const AssetImage(
-                      "assets/images/download.jpg",
+                ? ClipRRect(
+                    borderRadius: BorderRadius.circular(20),
+                    child: Image(
+                      image: const AssetImage(
+                        "assets/images/download.jpg",
+                      ),
+                      width: width * (250 / 340),
+                      height: height * (250 / 804),
+                      fit: BoxFit.cover,
                     ),
-                    width: width * (250 / 340),
-                    height: height * (250 / 804),
-                    fit: BoxFit.cover,
                   )
-                : Image.file(
-                    image!,
-                    width: width * (250 / 340),
-                    height: height * (250 / 804),
-                    fit: BoxFit.cover,
-                  )),
+                : ClipRRect(
+                    borderRadius: BorderRadius.circular(20),
+                    child: Image.file(
+                      image!,
+                      width: width * (250 / 340),
+                      height: height * (250 / 804),
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+          ),
+        ),
         Padding(
             padding:
                 const EdgeInsets.only(left: 50, right: 50, top: 8, bottom: 8),
@@ -165,14 +178,14 @@ class _OCRInputState extends State<OCRInput> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var token = prefs.getString('token');
     var res = await http.post(
-      Uri.parse('$url/rewriter/'),
+      Uri.parse('$url/chat/'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'token': '$token'
       },
       body: jsonEncode(<String, String>{
         "text":
-            "Fix it such that grammatical and spelling errors are corrected: $text",
+            "Fix it and answer such that grammatical and spelling errors are corrected: $text",
         "emotion": "Professional & Cheerful"
       }),
     );
@@ -233,32 +246,6 @@ class _OCRInputState extends State<OCRInput> {
     return lst;
   }
 
-  Future<List<Object?>> getGrammar(String text) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    var token = prefs.getString('token');
-    var res = await http.post(
-      Uri.parse('$url/grammar/'),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-        'token': '$token'
-      },
-      body: jsonEncode(
-          <String, String>{"text": text, "emotion": "Professional & Cheerful"}),
-    );
-    Map<String, dynamic> data = jsonDecode(res.body);
-    var stuff = Audio.fromJson(data);
-    if (kDebugMode) {
-      print(res.statusCode);
-      print(res.body);
-    }
-    if (res.statusCode == 200) {
-      if (kDebugMode) {
-        print(res.body);
-      }
-    }
-    return [stuff.text, res.statusCode];
-  }
-
   Future pickFile() async {
     try {
       FilePickerResult? result = await FilePicker.platform.pickFiles();
@@ -287,6 +274,7 @@ class _OCRInputState extends State<OCRInput> {
       setState(() {
         this.image = imagePath;
       });
+      return imagePath;
     } on PlatformException catch (e) {
       if (kDebugMode) {
         print('Failed to pick image: $e');

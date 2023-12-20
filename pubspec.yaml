@@ -52,6 +52,15 @@ dependencies:
   adaptive_theme:
   flutter_onboarding_slider:
   font_awesome_flutter:
+  shimmer:
+  percent_indicator:
+  carousel_slider:
+  dropdown_search:
+  youtube_player_flutter:
+  flutter_tts:
+  speech_to_text:
+  translator:
+  intl_phone_field:
 
 
   # The following adds the Cupertino Icons font to your application.

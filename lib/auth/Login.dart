@@ -12,7 +12,6 @@ import 'package:sih/auth/Signup/SignUp.dart';
 import 'package:http/http.dart' as http;
 import 'package:sih/Models/LogInModel.dart';
 import 'package:sih/helpers/Utils.dart';
-import 'package:sih/screens/UserPage.dart';
 import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart';
@@ -29,7 +28,7 @@ class Login extends StatefulWidget {
 class _Login extends State<Login> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final String url = Constants().url;
+  final String url = Constants().biggerUrl;
   String email = "", password = "";
   bool hidden = true;
   File? image;
@@ -58,7 +57,11 @@ class _Login extends State<Login> {
               gradient: LinearGradient(
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
-                  colors: [Colors.white, Colors.blue[200]!, Colors.cyan[300]!]),
+                  colors: [
+                    Colors.grey[900]!,
+                    Colors.black,
+                    Colors.grey[900]!,
+                  ]),
             ),
             child: Scaffold(
               backgroundColor: Colors.transparent,
@@ -72,9 +75,26 @@ class _Login extends State<Login> {
                 },
                 child: SingleChildScrollView(
                   child: Column(children: [
+                    SizedBox(
+                      width: width * (20 / 340),
+                      height: height * (30.0 / 804),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.only(right: 300.0),
+                      child: CircleAvatar(
+                        backgroundColor: Colors.white,
+                        child: IconButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          icon: const Icon(Icons.arrow_back_sharp),
+                          color: Colors.cyan[500],
+                        ),
+                      ),
+                    ),
                     Center(
                       child: Container(
-                        padding: const EdgeInsets.only(top: 80.0),
+                        padding: const EdgeInsets.only(top: 60.0),
                         child: Text(
                           AppLocalizations.of(context)!.railwayBuddy,
                           style: TextStyle(
@@ -217,11 +237,6 @@ class _Login extends State<Login> {
                                         await prefs.setBool('isLoggedIn', true);
                                         await prefs.setString('token', lst[1]);
                                         Navigator.of(context).pop();
-                                        Navigator.of(context).push(
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    UserPage(token: lst[1])));
-
                                         Utils.showSnackBar1(lst[0]);
                                       }
                                     }
@@ -243,7 +258,6 @@ class _Login extends State<Login> {
                               child: Text(
                                 AppLocalizations.of(context)!.forgotPassword,
                                 style: const TextStyle(
-                                    decoration: TextDecoration.underline,
                                     color: Colors.white,
                                     fontSize: 13.5,
                                     fontWeight: FontWeight.w700,
@@ -257,7 +271,7 @@ class _Login extends State<Login> {
                             ),
                             SizedBox(
                               width: width * (20 / 340),
-                              height: height * (150.0 / 804),
+                              height: height * (100.0 / 804),
                             ),
                             RichText(
                               text: TextSpan(
@@ -278,7 +292,7 @@ class _Login extends State<Login> {
                                                         const SignUp()));
                                           },
                                         text:
-                                            " ${AppLocalizations.of(context)!.forSignUp}",
+                                            " ${AppLocalizations.of(context)!.forSignUp}.",
                                         style: TextStyle(
                                             fontFamily: "productSansReg",
                                             decoration:

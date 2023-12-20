@@ -1,5 +1,4 @@
 import 'package:lottie/lottie.dart';
-import 'package:model_viewer_plus/model_viewer_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sih/main.dart';
 import 'package:flutter/material.dart';
@@ -29,7 +28,11 @@ class _SelectLanguageDropdownState extends State<SelectLanguageDropdown> {
               gradient: LinearGradient(
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
-                  colors: [Colors.white, Colors.blue[200]!, Colors.cyan[300]!]),
+                  colors: [
+                    Colors.grey[900]!,
+                    Colors.black,
+                    Colors.grey[900]!,
+                  ]),
             ),
             child: Scaffold(
                 backgroundColor: Colors.transparent,

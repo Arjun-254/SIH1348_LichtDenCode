@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:flutter/foundation.dart';
+import 'package:sih/language/changeLanguageDropdown.dart';
 import 'package:sih/screens/UserPage.dart';
-import 'package:sih/auth/Login.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -13,34 +13,22 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
+    return FutureBuilder<bool?>(
       future: getFlagValuesSF(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(
             child: CircularProgressIndicator(),
           );
-        } else if (snapshot.hasData && snapshot.data![0] == null) {
-          return const Login();
-        } else if (snapshot.hasData) {
-          if (snapshot.data![0]) {
-            return UserPage(
-              token: snapshot.data![1],
-            );
-          } else {
-            return const Login();
-          }
-        } else if (snapshot.hasError) {
-          if (kDebugMode) {
-            print(snapshot.error);
-          }
-          return const Center(
-            child: Text("Error occurred"),
-          );
-        } else {
+        } else if (!snapshot.hasData){
+          return const SelectLanguageDropdown();
+        }
+        else if (snapshot.hasData && snapshot.data!){
+          return const UserPage();
+        }
+        else {
           return const Center(
             child: CircularProgressIndicator(),
           );
@@ -50,12 +38,11 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
-Future<List<dynamic>?> getFlagValuesSF() async {
+Future<bool?> getFlagValuesSF() async {
   try {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? token = prefs.getString('token');
-    bool? isLoggedIn = prefs.getBool('isLoggedIn');
-    return [isLoggedIn, token];
+    bool? isFirstInstall = prefs.getBool('isFirstInstall');
+    return isFirstInstall;
   } catch (e) {
     if (kDebugMode) {
       print(e.toString());

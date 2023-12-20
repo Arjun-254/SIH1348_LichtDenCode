@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sih/models/SignUpModel.dart';
 import 'package:sih/helpers/Utils.dart';
 import 'package:sih/constants.dart';
@@ -26,9 +27,10 @@ class _SignUpState extends State<SignUp> {
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController firstNameController = TextEditingController();
   final TextEditingController lastNameController = TextEditingController();
+  final TextEditingController numberController = TextEditingController();
 
   String email1 = "", password1 = "", password2 = "";
-  final String url = Constants().url;
+  final String url = Constants().biggerUrl;
 
   bool hidden1 = true;
   bool hidden2 = true;
@@ -43,6 +45,7 @@ class _SignUpState extends State<SignUp> {
     passwordController.dispose();
     firstNameController.dispose();
     lastNameController.dispose();
+    numberController.dispose();
     super.dispose();
   }
 
@@ -113,6 +116,37 @@ class _SignUpState extends State<SignUp> {
                               padding: const EdgeInsets.only(
                                   left: 35.0, right: 35.0),
                               child: Column(children: [
+                                TextFormField(
+                                  keyboardType: TextInputType.number,
+                                  decoration: InputDecoration(
+                                      contentPadding: const EdgeInsets.all(13),
+                                      fillColor: Colors.white,
+                                      filled: true,
+                                      hintText: "Enter Phone No.",
+                                      hintStyle: const TextStyle(
+                                          fontFamily: "productSansReg",
+                                          fontWeight: FontWeight.w500,
+                                          color: Colors.black),
+                                      errorStyle: const TextStyle(
+                                          fontFamily: "productSansReg",
+                                          color: Colors.red,
+                                          fontWeight: FontWeight.w500),
+                                      border: OutlineInputBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(7.0),
+                                          borderSide: BorderSide.none)),
+                                  controller: numberController,
+                                  validator: (email) {
+                                    if ((email != null && email.length < 10) ||
+                                        email == null) {
+                                      return 'Please enter a Valid Phone No';
+                                    }
+                                    return null;
+                                  },
+                                  onSaved: (value) {
+                                    email1 = value!;
+                                  },
+                                ),
                                 const Padding(padding: EdgeInsets.all(10.0)),
                                 TextFormField(
                                   keyboardType: TextInputType.emailAddress,
@@ -267,6 +301,10 @@ class _SignUpState extends State<SignUp> {
                                                 emailController.text.trim(),
                                                 passwordController.text.trim(),
                                                 path);
+                                            SharedPreferences pref =
+                                                await SharedPreferences
+                                                    .getInstance();
+                                            pref.setBool('isLoggedIn', true);
                                             Utils.showSnackBar1(lst[0]);
                                             Navigator.of(context).pop();
                                           }

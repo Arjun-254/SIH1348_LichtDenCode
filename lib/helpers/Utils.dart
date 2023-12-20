@@ -19,7 +19,7 @@ class Utils {
     if (text == null) return;
     final val = SnackBar(
       content: Text(text),
-      backgroundColor: Colors.blueGrey,
+      backgroundColor: Colors.cyan,
     );
 
     messengerKey.currentState!
@@ -32,7 +32,7 @@ class Utils {
     final val = SnackBar(
       content: Text(
         text,
-        style: const TextStyle(color: Colors.blueGrey),
+        style: const TextStyle(color: Colors.cyan),
       ),
       backgroundColor: Colors.white,
     );

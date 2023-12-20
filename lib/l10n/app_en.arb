@@ -99,7 +99,7 @@
     "@logout": {
         "description": "For logout"
     },
-    "setting": "Setting",
+    "setting": "Settings",
     "@setting": {
         "description": "For settings"
     },
@@ -135,7 +135,7 @@
     "@landingPageThree": {
         "description": "For third landing page"
     },
-    "railwayBuddy": "RailwayBuddy",
+    "railwayBuddy": "RailwayMitra",
     "@landingPageThree": {
         "description": "For railway buddy"
     },
@@ -146,5 +146,25 @@
     "getStarted": "Get started",
     "@getStarted": {
         "description": "For get started"
+    },
+    "headlines": "Top Headlines",
+    "@headlines": {
+        "description": "For news page"
+    },
+    "home": "Home",
+    "@text": {
+        "description": "For bottombar home"
+    },
+    "news": "News",
+    "@news": {
+        "description": "For bottombar news"
+    },
+    "qna": "QnA",
+    "@qna": {
+        "description": "For bottombar QnA"
+    },
+    "ivrs": "IVRS",
+    "@ivrs": {
+        "description": "For IVRS"
     }
 }
