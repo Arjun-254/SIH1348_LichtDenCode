@@ -27,7 +27,7 @@ const TranslateMessage = ({ type, lang, srcLang, content }) => {
   const [correctedText, setCorrectedText] = useState("");
 
   const mimeType = "audio/webm";
-  const ngrokurl = "https://f304-34-91-60-225.ngrok-free.app"; //everything
+  const ngrokurl = "https://fcd2-34-125-55-159.ngrok-free.app"; //everything
   //in built api reference
   const mediaRecorder = useRef(null);
 
@@ -110,7 +110,7 @@ const TranslateMessage = ({ type, lang, srcLang, content }) => {
       console.log(srcLang);
       console.log(lang);
       const response = await fetch(
-        "https://f696-34-75-107-118.ngrok-free.app" + "/gtranslate", //translate different
+        "https://f248-34-143-168-214.ngrok-free.app" + "/gtranslate", //translate different
         {
           method: "POST",
           headers: {
@@ -119,8 +119,8 @@ const TranslateMessage = ({ type, lang, srcLang, content }) => {
           },
           body: JSON.stringify({
             text: content,
-            src_lang: srcLang,
-            tgt_lang: lang,
+            src_lang: srcLang.slice(0, 2),
+            tgt_lang: lang.slice(0, 2),
             emotion: "Neutral",
           }),
         }

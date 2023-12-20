@@ -37,7 +37,7 @@ export const TranslateInterface = () => {
   const [suggestions, setSuggestions] = useState([]);
 
   const mimeType = "audio/webm";
-  const ngrokurl = "https://f304-34-91-60-225.ngrok-free.app";
+  const ngrokurl = "https://fcd2-34-125-55-159.ngrok-free.app";
   //in built api reference
   const mediaRecorder = useRef(null);
 
@@ -266,7 +266,7 @@ export const TranslateInterface = () => {
   const [srcLang, setSrcLang] = useState("en_XX"); //set default to english for source
 
   return (
-    <div className="flex flex-col bg-gradient-to-b bg-cover bg-center from-white via-blue-100 to-cyan-300 h-screen max-h-screen mt-6 pt-10 no-scrollbar overflow-y-auto ">
+    <div className="flex flex-col bg-gradient-to-b bg-cover bg-center from-white to-blue-100 h-screen max-h-screen mt-6 pt-10 no-scrollbar overflow-y-auto ">
       <div className="flex justify-center items-center mx-auto p-2 my-4 rounded-3xl bg-gradient-to-r from-gray-400 via-gray-300 to-gray-500 w-3/6">
         <p className="text-gray-900 font-bold">On-the-fly Translation Engine</p>
       </div>
@@ -288,7 +288,7 @@ export const TranslateInterface = () => {
           />
         ))}
       </div>
-      <div className="justify-end bottom-0 left-0 right-0 bg-blue-100 border-1 py-6 px-2">
+      <div className="justify-end bottom-0 left-0 right-0 bg-slate-100 border-1 py-6 px-2">
         <div className="flex flex-row justify-between w-full ">
           <div className="audio-controls space-y-2 flex flex-row justify-center items-center">
             {!permission ? (
@@ -387,14 +387,17 @@ export const TranslateInterface = () => {
                 components={animatedComponents}
                 onChange={handleChoose}
                 menuPlacement="top"
+                placeholder={"Select Language to translate to..."}
               />
             </div>
-            <button
-              onClick={handleTranscribe}
-              className=" hover:animate-pulse bg-gradient-to-r from-pink-300 via-violet-300 to-purple-400 text-white font-bold shadow-md py-2 px-6 ml-2 rounded-full focus:outline-none focus:shadow-outline"
-            >
-              Transcribe
-            </button>
+            {audio || textInput ? (
+              <button
+                onClick={handleTranscribe}
+                className=" hover:animate-pulse bg-gradient-to-r from-green-300 via-green-300 to-green-400 text-white font-bold shadow-md py-2 px-6 ml-2 rounded-full focus:outline-none focus:shadow-outline"
+              >
+                Translate
+              </button>
+            ) : null}
           </div>
         </div>
       </div>

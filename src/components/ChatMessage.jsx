@@ -28,7 +28,7 @@ const ChatMessage = ({ type, content }) => {
   const [correctedText, setCorrectedText] = useState("");
 
   const mimeType = "audio/webm";
-  const ngrokurl = "https://f304-34-91-60-225.ngrok-free.app";
+  const ngrokurl = "https://fcd2-34-125-55-159.ngrok-free.app";
   //in built api reference
   const mediaRecorder = useRef(null);
 

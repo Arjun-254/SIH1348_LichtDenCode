@@ -30,7 +30,7 @@ export const UserInterface = () => {
   const [suggestions, setSuggestions] = useState([]);
 
   const mimeType = "audio/webm";
-  const ngrokurl = "https://f304-34-91-60-225.ngrok-free.app";
+  const ngrokurl = "https://fcd2-34-125-55-159.ngrok-free.app";
   //in built api reference
   const mediaRecorder = useRef(null);
 
@@ -205,7 +205,7 @@ export const UserInterface = () => {
   }, [messages]);
 
   return (
-    <div className="flex flex-col bg-gradient-to-b bg-cover bg-center from-white via-blue-100 to-cyan-300 h-screen max-h-screen mt-6 pt-10 no-scrollbar overflow-y-auto ">
+    <div className="flex flex-col bg-gradient-to-r bg-cover bg-center from-blue-200 to-blue-100  h-screen max-h-screen mt-6 pt-10 no-scrollbar overflow-y-auto ">
       <div className="flex justify-center items-center mx-auto p-2 my-4 rounded-3xl bg-gradient-to-r from-gray-400 via-gray-300 to-gray-500 w-3/6">
         <p className="text-gray-900 font-bold">
           Welcome to Railway Mitra - the chat assistant for real-time-queries.
@@ -281,6 +281,7 @@ export const UserInterface = () => {
               ></a>
             </div>
           ) : null}
+
           <div className="flex flex-col">
             <div className="flex flex-row justify-center items-center">
               <input
@@ -320,12 +321,14 @@ export const UserInterface = () => {
                 ariaLabel="circles-with-bar-loading"
               />
             )}
-            <button
-              onClick={handleTranscribe}
-              className=" hover:animate-pulse bg-gradient-to-r from-green-300 via-green-300 to-green-400 font-bold shadow-md py-2 px-6 ml-2 rounded-full focus:outline-none focus:shadow-outline"
-            >
-              Get Answer
-            </button>
+            {audio ? (
+              <button
+                onClick={handleTranscribe}
+                className=" hover:animate-pulse bg-gradient-to-r from-green-300 via-green-300 to-green-400 font-bold shadow-md py-2 px-6 ml-2 rounded-full focus:outline-none focus:shadow-outline"
+              >
+                Get Answer
+              </button>
+            ) : null}
           </div>
         </div>
       </div>
